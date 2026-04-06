@@ -1,0 +1,357 @@
+import { useState, useEffect } from "react";
+
+const C = { d1:"#022023", d2:"#184647", g:"#2BAC22", gl:"#90DF3E", gr:"#2BAC22", w:"#f5f5f0", ch:"#0a1a1b", tl:"rgba(245,245,240,0.85)", td:"rgba(245,245,240,0.5)" };
+const F = "'Montserrat', sans-serif";
+
+const sectorData = {
+  "Water Treatment & Desalination": { market:"$14.9B+", countries:["Saudi Arabia","UAE","Egypt","Jordan","Oman","Algeria"], growth:"9.1%", detail:"MEA water treatment reaching $6.2B by 2030. Desalination equipment $8.7B by 2032. Egypt needs to scale from 1.4M to 10M cubic meters/day by 2030." },
+  "Renewable Energy & Storage": { market:"$59.9B", countries:["Egypt","Morocco","Saudi Arabia","UAE","Jordan","Mauritania","Oman"], growth:"14.4%", detail:"MENA renewable energy projected at $59.9B by 2030. Egypt leads at $19.8B. $351B cumulative FDI across the Arab region." },
+  "Waste Management & Circular Economy": { market:"Growing Fast", countries:["Saudi Arabia","UAE","Egypt","Bahrain","Qatar"], growth:"High", detail:"GCC waste-to-energy protocol signed 2025. Egypt generates 100M+ tons of solid waste annually. 40% landfill diversion target by 2030." },
+  "AgTech & Smart Farming": { market:"$1.45B+", countries:["Saudi Arabia","UAE","Egypt","Qatar","Morocco","Jordan"], growth:"17.6%", detail:"Fastest growing AgTech market globally at 17.6% CAGR. 85% of GCC food imported. 1,301 food & ag startups in GCC. $3.8B invested." },
+  "Environmental IoT & Monitoring": { market:"$74.6B global", countries:["Saudi Arabia","UAE","Egypt","Jordan","Oman","Qatar"], growth:"7%", detail:"Digital water tech reaching $74.6B globally by 2030. Smart meters, leak detection, SCADA systems in high demand across 22 Arab countries." },
+  "Green Hydrogen": { market:"$130B/yr by 2050", countries:["Egypt","Morocco","Oman","Saudi Arabia","Mauritania","UAE"], growth:"Exponential", detail:"MENA forecast to earn $130B annually from clean hydrogen exports by 2050. Egypt targeting 5-8% of global hydrogen trade." },
+};
+
+const Flag = ({code,size=20}) => <img src={`https://flagcdn.com/w40/${code}.png`} alt="" style={{width:size,height:Math.round(size*0.75),borderRadius:2,objectFit:"cover"}} />;
+
+const countries = [
+  { n:"Egypt",cc:"eg",h:true,gw:"Gateway to North Africa & the Nile Basin",s:"Renewable market $19.8B by 2030. $17.7B water infrastructure plan. $14.7B NWFE climate projects. 42% renewables target. 100M+ tons solid waste annually.",t:["Water","Energy","Waste","AgTech","H₂"] },
+  { n:"Jordan",cc:"jo",h:true,gw:"Gateway to the Levant & Eastern Mediterranean",s:"World's 5th most water-scarce country. $3B+ Aqaba-Amman desalination mega-project. 50% renewables target by 2030. $60B Economic Modernization Vision.",t:["Water","Energy","IoT","AgTech"] },
+  { n:"Saudi Arabia",cc:"sa",h:true,gw:"Gateway to the GCC & Arabian Peninsula",s:"Green tech market $5.3B→$12.8B by 2030. 50% renewables target. 130 GW renewable capacity planned. NEOM smart city. Vision 2030.",t:["Water","Energy","Waste","AgTech","H₂"] },
+  { n:"Morocco",cc:"ma",h:true,gw:"Gateway to the Maghreb & Africa",s:"52% renewables by 2030. $5.6B solar/wind underway. 90% energy imported. Green hydrogen CAPEX $120B+ by 2050. Xlinks UK interconnector.",t:["Energy","H₂","AgTech","Water"] },
+  { n:"UAE",cc:"ae",h:false,s:"Net Zero 2050. $40B+ cumulative clean energy. $36B NDC needs. ALTÉRRA $30B climate fund.",t:["Water","Energy","AgTech","IoT","H₂"] },
+  { n:"Qatar",cc:"qa",h:false,s:"20% renewables target. 800MW Al Kharsaah solar. Heavy AgTech & alternative protein investment.",t:["Energy","AgTech","Water","IoT"] },
+  { n:"Oman",cc:"om",h:false,s:"Net Zero 2050. Green hydrogen hub Duqm & Salalah.",t:["H₂","Energy","Water"] },
+  { n:"Bahrain",cc:"bh",h:false,s:"$30B Strategic Projects Plan. Waste-to-energy protocol.",t:["Waste","Energy"] },
+  { n:"Kuwait",cc:"kw",h:false,s:"Net Zero 2060. KIA climate integration. RE expansion.",t:["Energy","Water"] },
+  { n:"Iraq",cc:"iq",h:false,s:"Top 5 Arab electricity producer. Massive infra gap.",t:["Water","Energy","Waste"] },
+  { n:"Algeria",cc:"dz",h:false,s:"Needs 2,700% RE capacity increase. Blue hydrogen pivot.",t:["Energy","H₂","Water"] },
+  { n:"Tunisia",cc:"tn",h:false,s:"Growing RE. Water stress. EU green transition programs.",t:["Energy","Water"] },
+  { n:"Libya",cc:"ly",h:false,s:"Post-conflict rebuilding. 2,000 MW Egypt interconnection.",t:["Energy","Water"] },
+  { n:"Sudan",cc:"sd",h:false,s:"RE resources like Morocco/Egypt but almost entirely undeveloped.",t:["Energy","Water"] },
+  { n:"Mauritania",cc:"mr",h:false,s:"Top 5 Arab RE FDI. Green hydrogen & wind frontier.",t:["Energy","H₂"] },
+  { n:"Lebanon",cc:"lb",h:false,s:"Acute energy crisis. Decentralized solar growing.",t:["Energy","Water"] },
+  { n:"Palestine",cc:"ps",h:false,s:"Top MENA water importer. Solar growing. Water critical.",t:["Water","Energy"] },
+  { n:"Yemen",cc:"ye",h:false,s:"Severe water & energy crisis. Off-grid solar opportunity.",t:["Water","Energy"] },
+  { n:"Somalia",cc:"so",h:false,s:"Off-grid RE demand. Water purification critical.",t:["Water","Energy"] },
+  { n:"Djibouti",cc:"dj",h:false,s:"Red Sea location. Geothermal & solar. Desal needs.",t:["Energy","Water"] },
+  { n:"Comoros",cc:"km",h:false,s:"Island nation. Solar & waste needs.",t:["Energy","Waste"] },
+  { n:"Syria",cc:"sy",h:false,s:"Post-conflict. Water & energy infrastructure devastated.",t:["Water","Energy"] },
+];
+
+const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
+const Grad = ({children,style={}}) => <span style={{background:`linear-gradient(90deg,${C.gl},${C.gr})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",...style}}>{children}</span>;
+
+/* ========== EDIT 1: HAMBURGER MOBILE MENU ========== */
+function Nav({active}) {
+  const [sc,setSc]=useState(false);
+  const [menuOpen,setMenuOpen]=useState(false);
+  useEffect(()=>{const h=()=>setSc(window.scrollY>50);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h)},[]);
+  const items=[{id:"hero",l:"Home"},{id:"problem",l:"Problem"},{id:"services",l:"Services"},{id:"tool",l:"Market Fit"},{id:"markets",l:"Markets"},{id:"about",l:"About"},{id:"contact",l:"Contact"}];
+  return <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:1000,background:sc||menuOpen?"rgba(2,32,35,0.97)":"transparent",backdropFilter:sc?"blur(20px)":"none",borderBottom:sc?`1px solid rgba(43,172,34,0.1)`:"none",transition:"all .4s",padding:"0 24px"}}>
+    <div style={{maxWidth:1200,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",height:68}}>
+      <div onClick={()=>scroll("hero")} style={{cursor:"pointer",display:"flex",alignItems:"center"}}>
+        <img src="/logo-horizontal.png" alt="GreenTech Bridge Ventures" style={{height:34}} />
+      </div>
+      {/* Desktop menu */}
+      <div className="desktop-nav" style={{display:"flex",gap:2}}>
+        {items.map(i=><button key={i.id} onClick={()=>scroll(i.id)} style={{background:active===i.id?"rgba(43,172,34,0.1)":"none",border:"none",color:active===i.id?C.g:C.tl,fontFamily:F,fontSize:11,fontWeight:700,cursor:"pointer",padding:"7px 12px",borderRadius:6,transition:"all .2s",letterSpacing:"0.04em",textTransform:"uppercase"}}>{i.l}</button>)}
+      </div>
+      {/* Mobile hamburger */}
+      <button className="mobile-hamburger" onClick={()=>setMenuOpen(!menuOpen)} style={{display:"none",background:"none",border:"none",cursor:"pointer",padding:8,flexDirection:"column",gap:5,justifyContent:"center"}}>
+        <span style={{display:"block",width:24,height:2,background:C.w,borderRadius:2,transition:"all .3s",transform:menuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
+        <span style={{display:"block",width:24,height:2,background:C.w,borderRadius:2,transition:"all .3s",opacity:menuOpen?0:1}}/>
+        <span style={{display:"block",width:24,height:2,background:C.w,borderRadius:2,transition:"all .3s",transform:menuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+      </button>
+    </div>
+    {/* Mobile dropdown */}
+    {menuOpen && <div className="mobile-menu" style={{display:"none",flexDirection:"column",padding:"8px 0 20px",borderTop:"1px solid rgba(43,172,34,0.1)"}}>
+      {items.map(i=><button key={i.id} onClick={()=>{scroll(i.id);setMenuOpen(false);}} style={{background:active===i.id?"rgba(43,172,34,0.08)":"none",border:"none",color:active===i.id?C.g:C.tl,fontFamily:F,fontSize:14,fontWeight:600,cursor:"pointer",padding:"12px 16px",textAlign:"left",borderRadius:6,letterSpacing:"0.02em"}}>{i.l}</button>)}
+    </div>}
+  </nav>;
+}
+
+function Hero() {
+  const stats=[{n:"$250B+",l:"Green infrastructure investment"},{n:"$351B",l:"Cumulative RE FDI"},{n:"85%",l:"GCC food imported"},{n:"22",l:"Arab countries"},{n:"$31.5B",l:"Annual equipment imports"}];
+  return <section id="hero" style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",background:`linear-gradient(165deg,${C.d1} 0%,#011518 40%,${C.d2} 100%)`,position:"relative",overflow:"hidden"}}>
+    <div style={{position:"absolute",top:"-20%",right:"-5%",width:"50vw",height:"50vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(43,172,34,0.05) 0%,transparent 70%)"}}/>
+    <div style={{maxWidth:1200,margin:"0 auto",padding:"120px 24px 40px",position:"relative",zIndex:1}}>
+      <div style={{display:"inline-block",padding:"6px 18px",borderRadius:20,background:"rgba(43,172,34,0.08)",border:"1px solid rgba(43,172,34,0.2)",fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.1em",marginBottom:28,textTransform:"uppercase"}}><Grad>European CleanTech → Arab Markets</Grad></div>
+      <h1 style={{fontFamily:F,fontSize:"clamp(32px,5vw,58px)",fontWeight:800,color:C.w,lineHeight:1.08,marginBottom:24,maxWidth:760,letterSpacing:"-0.03em"}}>The Arab Market Gateway for <Grad>European Green Innovation</Grad></h1>
+      <p style={{fontFamily:F,fontSize:15,color:C.tl,lineHeight:1.8,maxWidth:560,marginBottom:40,fontWeight:400}}>Over $250 billion in cumulative green infrastructure investment is flowing into 22 Arab countries. The vast majority of environmental technologies deployed in the region are imported. We are the operational bridge that gets your technology there.</p>
+      <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
+        <button onClick={()=>scroll("tool")} style={{padding:"15px 32px",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 24px rgba(43,172,34,0.25)"}}>Check Your Market Fit — Free</button>
+        <button onClick={()=>scroll("contact")} style={{padding:"15px 32px",background:"transparent",color:C.g,border:`2px solid ${C.g}`,borderRadius:8,fontFamily:F,fontSize:13,fontWeight:700,cursor:"pointer"}}>Book a Strategy Call</button>
+      </div>
+    </div>
+    <div style={{display:"flex",flexWrap:"wrap"}}>
+      {stats.map((s,i)=><div key={i} style={{flex:"1 1 180px",padding:"26px 18px",background:i%2===0?C.d2:"rgba(24,70,71,0.5)",textAlign:"center",borderRight:i<4?"1px solid rgba(255,255,255,0.04)":"none"}}>
+        <div style={{fontFamily:F,fontSize:24,fontWeight:800,marginBottom:5}}><Grad>{s.n}</Grad></div>
+        <div style={{fontFamily:F,fontSize:10,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.l}</div>
+      </div>)}
+    </div>
+  </section>;
+}
+
+function Problem() {
+  const g=[{t:"The Regulatory Maze",d:"European founders lack local networks and operational partners to navigate procurement and regulation across diverse Arab markets.",i:"🏛️"},{t:"The Climate Mismatch",d:"TRL 9 technology proven in European weather often fails in Arab heat, humidity, and salinity. Without climate adaptation, sales stall.",i:"🌡️"},{t:"The Expansion Dead-End",d:"Without a local operating partner, market entry costs are prohibitive. Most European companies give up within 12 months.",i:"🚧"},{t:"The Operational Vacuum",d:"No local specialized support infrastructure exists to install, maintain, and service European environmental technology on the ground.",i:"⚙️"}];
+  return <section id="problem" style={{background:C.ch,padding:"100px 24px"}}>
+    <div style={{maxWidth:1200,margin:"0 auto"}}>
+      <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>The Innovation Gap</Grad></div>
+      <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14,letterSpacing:"-0.02em"}}>Why European Green Tech Stalls at the Border</h2>
+      <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:48,fontWeight:400}}>European cleantech companies are ready to export, but the destination isn't ready to receive them. Four structural gaps block the path.</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(255px,1fr))",gap:14}}>
+        {g.map((x,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:12,padding:"28px 22px",borderTop:`3px solid ${C.g}`}}>
+          <div style={{fontSize:28,marginBottom:14}}>{x.i}</div>
+          <h3 style={{fontFamily:F,fontSize:17,fontWeight:700,color:C.w,marginBottom:8}}>{x.t}</h3>
+          <p style={{fontFamily:F,fontSize:12.5,color:C.tl,lineHeight:1.7,fontWeight:400}}>{x.d}</p>
+        </div>)}
+      </div>
+    </div>
+  </section>;
+}
+
+function Services() {
+  const t=[
+    {n:"Explorer",tg:"Know your market",tm:"4 weeks",ft:["Market entry brief with target countries","Competitive landscape analysis","Regulatory requirements mapping","Procurement channel identification","1 strategy call with MENA team"],b:"Companies exploring MENA for the first time",p:"Fixed retainer (one-time)"},
+    {n:"Accelerator",tg:"Meet your buyers",tm:"8–12 weeks",featured:true,ft:["Everything in Explorer","5–10 curated buyer introductions","Government procurement connections","Local distributor matching","2 facilitated decision-maker meetings"],b:"Companies ready to start buyer conversations",p:"Retainer + success fee"},
+    {n:"Full Bridge",tg:"We become your MENA arm",tm:"6–12 months",ft:["Everything in Accelerator","First MENA contract or pilot","On-ground ops (KSA, Jordan, Egypt)","Compliance, logistics & management","Exclusive or semi-exclusive representation"],b:"Companies ready to deploy with a local partner",p:"Retainer + commission + margin"},
+  ];
+  return <section id="services" style={{background:C.d1,padding:"100px 24px"}}>
+    <div style={{maxWidth:1200,margin:"0 auto"}}>
+      <div style={{textAlign:"center",marginBottom:48}}>
+        <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>Services</Grad></div>
+        <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:10}}>Three Ways to Cross the Bridge</h2>
+        <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:520,margin:"0 auto",lineHeight:1.7,fontWeight:400}}>Whether you're exploring or ready to deploy, we have a path for you.</p>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(290px,1fr))",gap:14,alignItems:"stretch"}}>
+        {t.map((x,i)=><div key={i} style={{background:x.featured?"rgba(43,172,34,0.06)":"rgba(255,255,255,0.02)",border:x.featured?`2px solid ${C.g}`:"1px solid rgba(255,255,255,0.05)",borderRadius:14,padding:"34px 24px",display:"flex",flexDirection:"column",position:"relative"}}>
+          {x.featured&&<div style={{position:"absolute",top:-13,left:"50%",transform:"translateX(-50%)",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,padding:"5px 16px",borderRadius:12,fontFamily:F,fontSize:9,fontWeight:800,letterSpacing:"0.08em",textTransform:"uppercase"}}>Most Popular</div>}
+          <h3 style={{fontFamily:F,fontSize:22,fontWeight:800,color:C.w,marginBottom:2}}>{x.n}</h3>
+          <div style={{fontFamily:F,fontSize:12,color:C.g,fontWeight:600,marginBottom:4}}>{x.tg}</div>
+          <div style={{fontFamily:F,fontSize:10,color:C.td,marginBottom:22,fontWeight:500}}>Timeline: {x.tm}</div>
+          <div style={{flex:1}}>{x.ft.map((f,j)=><div key={j} style={{display:"flex",gap:7,marginBottom:8}}><span style={{color:C.g,fontSize:12,fontWeight:700,marginTop:2}}>✓</span><span style={{fontFamily:F,fontSize:12.5,color:C.tl,lineHeight:1.5,fontWeight:400}}>{f}</span></div>)}</div>
+          <div style={{marginTop:16,padding:"10px 0",borderTop:"1px solid rgba(255,255,255,0.05)"}}>
+            <div style={{fontFamily:F,fontSize:10,color:C.td,marginBottom:3,fontWeight:500}}>Best for</div>
+            <div style={{fontFamily:F,fontSize:11,color:C.tl,fontWeight:400}}>{x.b}</div>
+          </div>
+          <div style={{fontFamily:F,fontSize:11,color:C.g,fontWeight:700,marginTop:10}}>{x.p}</div>
+          <button onClick={()=>scroll("contact")} style={{marginTop:14,padding:"12px 0",width:"100%",borderRadius:8,background:x.featured?`linear-gradient(90deg,${C.gl},${C.gr})`:"transparent",color:x.featured?C.d1:C.g,border:x.featured?"none":`2px solid ${C.g}`,fontFamily:F,fontSize:12,fontWeight:700,cursor:"pointer"}}>Contact Us for Pricing</button>
+        </div>)}
+      </div>
+    </div>
+  </section>;
+}
+
+function Tool() {
+  const [step,setStep]=useState(0);const [ans,setAns]=useState({});const [res,setRes]=useState(null);
+  const qs=[
+    {k:"sector",l:"What sector is your technology in?",o:Object.keys(sectorData)},
+    {k:"trl",l:"Technology Readiness Level?",o:["TRL 6–7 (Prototype/Demo)","TRL 8 (System complete)","TRL 9 (Proven in operation)","Already commercialized"]},
+    {k:"revenue",l:"Annual revenue range?",o:["Pre-revenue","Under €1M","€1M – €5M","€5M – €20M","€20M+"]},
+    {k:"mena",l:"Existing MENA presence?",o:["None at all","Some conversations","Active distributor/partner","Operational presence"]},
+    {k:"heat",l:"Tested in high-heat (40°C+)?",o:["Yes, fully validated","Partially tested","No, European conditions only"]},
+    {k:"water",l:"Requires significant water input?",o:["No water needed","Minimal water","Yes, significant water"]},
+    {k:"maint",l:"Requires specialized local maintenance?",o:["Fully remote capable","Some local support","Specialized on-site teams"]},
+    {k:"goal",l:"Primary goal for MENA?",o:["Market intelligence only","Finding buyers & partners","First pilot project","Full market entry & distribution"]},
+    {k:"time",l:"Timeline for MENA entry?",o:["Exploring (12+ months)","Planning (6–12 months)","Ready now (< 6 months)","Already started"]},
+  ];
+  function calc(a){let sc=0;const sd=sectorData[a.sector]||{};sc+=({"Water Treatment & Desalination":28,"Renewable Energy & Storage":30,"Waste Management & Circular Economy":22,"AgTech & Smart Farming":26,"Environmental IoT & Monitoring":20,"Green Hydrogen":25})[a.sector]||20;sc+=({"TRL 6–7 (Prototype/Demo)":8,"TRL 8 (System complete)":14,"TRL 9 (Proven in operation)":18,"Already commercialized":20})[a.trl]||10;let cl=0;if(a.heat==="Yes, fully validated")cl+=10;else if(a.heat==="Partially tested")cl+=5;if(a.water==="No water needed")cl+=6;else if(a.water==="Minimal water")cl+=3;if(a.maint==="Fully remote capable")cl+=4;else if(a.maint==="Some local support")cl+=2;sc+=cl;sc+=({"Pre-revenue":3,"Under €1M":6,"€1M – €5M":10,"€5M – €20M":13,"€20M+":15})[a.revenue]||5;const ps=({"None at all":3,"Some conversations":7,"Active distributor/partner":11,"Operational presence":15})[a.mena]||3;const ts=({"Exploring (12+ months)":1,"Planning (6–12 months)":4,"Ready now (< 6 months)":6,"Already started":7})[a.time]||2;const gs=({"Market intelligence only":1,"Finding buyers & partners":3,"First pilot project":5,"Full market entry & distribution":6})[a.goal]||2;sc+=Math.round((ps+ts+gs)/2);sc=Math.min(Math.max(sc,15),97);const tc=(sd.countries||["Saudi Arabia","UAE","Egypt"]).slice(0,3);const ri=[];if(a.heat==="No, European conditions only")ri.push("Climate adaptation required before deployment");if(a.water==="Yes, significant water")ri.push("Water-intensive tech faces constraints in water-scarce markets");if(a.maint==="Specialized on-site teams")ri.push("Local O&M capability will need to be built");if(a.trl?.includes("6–7"))ri.push("Further validation needed before commercial pilots");if(!ri.length)ri.push("Strong profile — focus on speed of market entry");let tier="Explorer";if(a.goal==="Full market entry & distribution"||a.time==="Already started")tier="Full Bridge";else if(a.goal==="Finding buyers & partners"||a.goal==="First pilot project")tier="Accelerator";setRes({sc,tc,m:sd.market||"Growing",g:sd.growth||"High",d:sd.detail||"",ri,tier});}
+
+  if(res){const lev=res.sc>=75?"High Potential":res.sc>=50?"Good Potential":"Early Stage";const lc=res.sc>=75?C.gl:res.sc>=50?C.g:"#fbbf24";
+    return <section id="tool" style={{background:`linear-gradient(170deg,${C.d2} 0%,${C.d1} 100%)`,padding:"100px 24px"}}><div style={{maxWidth:720,margin:"0 auto"}}>
+      <div style={{textAlign:"center",marginBottom:36}}><div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:10,textTransform:"uppercase"}}><Grad>Your Results</Grad></div><h2 style={{fontFamily:F,fontSize:34,fontWeight:800,color:C.w}}>MENA Market Fit Score</h2></div>
+      <div style={{textAlign:"center",marginBottom:32}}><div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:150,height:150,borderRadius:"50%",background:`conic-gradient(${lc} ${res.sc*3.6}deg,rgba(255,255,255,0.04) 0deg)`,position:"relative"}}><div style={{width:120,height:120,borderRadius:"50%",background:C.d1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",position:"absolute"}}><span style={{fontFamily:F,fontSize:42,fontWeight:800,color:C.w}}>{res.sc}</span><span style={{fontFamily:F,fontSize:9,fontWeight:700,color:lc,letterSpacing:"0.05em"}}>{lev}</span></div></div></div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
+        <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)"}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:8,fontWeight:700,textTransform:"uppercase"}}>Top Markets</div>{res.tc.map((c,i)=>{const cd=countries.find(x=>x.n===c);return<div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>{cd&&<Flag code={cd.cc} size={20}/>}<span style={{fontFamily:F,fontSize:13,color:C.w,fontWeight:600}}>{c}</span></div>;})}</div>
+        <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)"}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:8,fontWeight:700,textTransform:"uppercase"}}>Market Size</div><div style={{fontFamily:F,fontSize:26,fontWeight:800,marginBottom:3}}><Grad>{res.m}</Grad></div><div style={{fontFamily:F,fontSize:11,color:C.tl,fontWeight:400}}>Growth: {res.g} CAGR</div></div>
+      </div>
+      <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)",marginBottom:10}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:6,fontWeight:700,textTransform:"uppercase"}}>Market Insight</div><p style={{fontFamily:F,fontSize:12,color:C.tl,lineHeight:1.7,fontWeight:400}}>{res.d}</p></div>
+      <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)",marginBottom:10}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:6,fontWeight:700,textTransform:"uppercase"}}>Key Risks</div>{res.ri.map((r,i)=><div key={i} style={{display:"flex",gap:6,marginBottom:4}}><span style={{color:"#fbbf24",fontSize:10,marginTop:2}}>⚠</span><span style={{fontFamily:F,fontSize:11,color:C.tl,fontWeight:400}}>{r}</span></div>)}</div>
+      <div style={{background:"rgba(43,172,34,0.06)",borderRadius:10,padding:20,border:`1px solid rgba(43,172,34,0.15)`,marginBottom:24,textAlign:"center"}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:5,fontWeight:700,textTransform:"uppercase"}}>Recommended Service</div><div style={{fontFamily:F,fontSize:22,fontWeight:800}}><Grad>{res.tier}</Grad></div></div>
+      <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}><button onClick={()=>scroll("contact")} style={{padding:"13px 28px",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:13,fontWeight:700,cursor:"pointer"}}>Book a Free Strategy Call</button><button onClick={()=>{setRes(null);setStep(0);setAns({})}} style={{padding:"13px 28px",background:"transparent",color:C.g,border:`2px solid ${C.g}`,borderRadius:8,fontFamily:F,fontSize:13,fontWeight:700,cursor:"pointer"}}>Retake</button></div>
+    </div></section>;}
+
+  const q=qs[step];
+  return <section id="tool" style={{background:`linear-gradient(170deg,${C.d2} 0%,${C.d1} 100%)`,padding:"100px 24px"}}><div style={{maxWidth:620,margin:"0 auto"}}>
+    <div style={{textAlign:"center",marginBottom:40}}><div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:10,textTransform:"uppercase"}}><Grad>Free Assessment</Grad></div><h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,36px)",fontWeight:800,color:C.w,marginBottom:6}}>MENA Market Fit Score</h2><p style={{fontFamily:F,fontSize:13,color:C.tl,fontWeight:400}}>Answer {qs.length} questions to discover your potential in the Arab market</p></div>
+    <div style={{display:"flex",gap:3,marginBottom:24}}>{qs.map((_,i)=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i<=step?`linear-gradient(90deg,${C.gl},${C.gr})`:"rgba(255,255,255,0.07)",transition:"all .3s"}}/>)}</div>
+    <div style={{fontFamily:F,fontSize:10,color:C.td,marginBottom:6,fontWeight:600}}>Question {step+1} of {qs.length}</div>
+    <h3 style={{fontFamily:F,fontSize:18,fontWeight:700,color:C.w,marginBottom:18}}>{q.l}</h3>
+    <div style={{display:"flex",flexDirection:"column",gap:7}}>{q.o.map((opt,i)=><button key={i} onClick={()=>{const na={...ans,[q.k]:opt};setAns(na);if(step<qs.length-1)setStep(step+1);else setTimeout(()=>calc(na),50);}} style={{padding:"14px 16px",background:ans[q.k]===opt?"rgba(43,172,34,0.1)":"rgba(255,255,255,0.02)",border:ans[q.k]===opt?`1px solid ${C.g}`:"1px solid rgba(255,255,255,0.06)",borderRadius:9,cursor:"pointer",textAlign:"left",fontFamily:F,fontSize:13,color:C.w,fontWeight:500,transition:"all .2s"}}>{opt}</button>)}</div>
+    {step>0&&<button onClick={()=>setStep(step-1)} style={{marginTop:14,padding:"6px 14px",background:"none",border:"none",color:C.td,fontFamily:F,fontSize:11,cursor:"pointer",fontWeight:600}}>← Back</button>}
+  </div></section>;
+}
+
+function Markets() {
+  const [sel,setSel]=useState(null);const pri=countries.filter(c=>c.h),oth=countries.filter(c=>!c.h);
+  return <section id="markets" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
+    <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>22 Arab Countries</Grad></div>
+    <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Market Opportunities Across the Arab Region</h2>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:36,fontWeight:400}}>From GCC megaprojects to North Africa's renewable boom and the Levant's water crisis — every Arab market has environmental technology needs.</p>
+    <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:12,textTransform:"uppercase"}}><Grad>Regional Gateways</Grad></div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:10,marginBottom:32}}>
+      {pri.map((c,i)=><button key={i} onClick={()=>setSel(sel===c.n?null:c.n)} style={{background:sel===c.n?"rgba(43,172,34,0.08)":"rgba(255,255,255,0.02)",border:sel===c.n?`1px solid ${C.g}`:"1px solid rgba(255,255,255,0.05)",borderRadius:10,padding:"16px 18px",cursor:"pointer",textAlign:"left",transition:"all .2s"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:sel===c.n?6:0}}><Flag code={c.cc} size={24}/><span style={{fontFamily:F,fontSize:14,color:C.w,fontWeight:700}}>{c.n}</span><span style={{marginLeft:"auto",color:C.td,fontSize:10}}>{sel===c.n?"▲":"▼"}</span></div>
+        {!sel&&c.gw&&<div style={{fontFamily:F,fontSize:10,color:C.g,fontWeight:500,marginTop:4,fontStyle:"italic"}}>{c.gw}</div>}
+        {sel===c.n&&<div><div style={{fontFamily:F,fontSize:10,color:C.g,fontWeight:500,marginBottom:6,fontStyle:"italic"}}>{c.gw}</div><p style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.6,marginBottom:8,fontWeight:400}}>{c.s}</p><div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{c.t.map((s,j)=><span key={j} style={{padding:"2px 8px",borderRadius:8,background:"rgba(43,172,34,0.1)",fontFamily:F,fontSize:9,color:C.g,fontWeight:600}}>{s}</span>)}</div></div>}
+      </button>)}
+    </div>
+    <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All Arab Markets</div>
+    <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+      {oth.map((c,i)=><button key={i} onClick={()=>setSel(sel===c.n?null:c.n)} style={{background:sel===c.n?"rgba(43,172,34,0.08)":"rgba(255,255,255,0.015)",border:sel===c.n?`1px solid ${C.g}`:"1px solid rgba(255,255,255,0.04)",borderRadius:7,padding:"7px 10px",cursor:"pointer",textAlign:"left",transition:"all .2s",minWidth:sel===c.n?270:"auto"}}>
+        <div style={{display:"flex",alignItems:"center",gap:6}}><Flag code={c.cc} size={16}/><span style={{fontFamily:F,fontSize:11,color:C.tl,fontWeight:500}}>{c.n}</span></div>
+        {sel===c.n&&<p style={{marginTop:5,fontFamily:F,fontSize:10,color:C.tl,lineHeight:1.5,fontWeight:400}}>{c.s}</p>}
+      </button>)}
+    </div>
+  </div></section>;
+}
+
+/* ========== EDIT 3: NEW ABOUT HEADING + EDIT 4: VISUAL TIMELINE + EDIT 5: SECTORS WE SERVE ========== */
+function About() {
+  const cr=[{n:"16+",l:"Years building environmental tech ecosystems across the Arab region"},{n:"22",l:"Countries of direct operational experience and government relationships"},{n:"$630M+",l:"Programme portfolio managed through regional technology centres"},{n:"1,500+",l:"Startups accelerated through regional innovation programmes"},{n:"2,000+",l:"Green SMEs supported through sustainability training programmes"},{n:"15,000+",l:"Stakeholders engaged across 80+ countries via annual summits"}];
+
+  const timeline=[
+    {step:"01",title:"Assess",time:"4 weeks",color:C.g,desc:"We evaluate your technology's fit for MENA markets, identify target countries, and map the competitive landscape.",deliverable:"Written market entry brief with target countries, regulatory map, competitive analysis, and procurement channels"},
+    {step:"02",title:"Connect",time:"8–12 weeks",color:"#90DF3E",desc:"We introduce you to pre-qualified buyers, government procurement officers, and local distribution partners.",deliverable:"5–10 curated introductions and 2 facilitated meetings with decision-makers"},
+    {step:"03",title:"Deploy",time:"6–12 months",color:"#2BAC22",desc:"We facilitate your first MENA contract or pilot project through our local operations in KSA, Jordan, and Egypt.",deliverable:"Signed contract or active pilot — compliance, logistics, and client management handled"},
+  ];
+
+  const sectors=[
+    {icon:"💧",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
+    {icon:"⚡",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
+    {icon:"♻️",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
+    {icon:"🌱",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
+    {icon:"📡",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
+    {icon:"🔬",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
+  ];
+
+  return <section id="about" style={{background:C.d1,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
+    {/* EDIT 3: New heading */}
+    <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>About Us</Grad></div>
+    <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Your <Grad>Operating Partner</Grad> in the Arab Market</h2>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:48,fontWeight:400}}>GreenTech Bridge is a market access platform built by a team that has spent over a decade and a half on the ground across the Arab region — building technology ecosystems, managing large-scale programmes, forging government partnerships, and accelerating thousands of startups and green SMEs. We don't advise from the outside. We operate from within.</p>
+
+    {/* Credential cards */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(165px,1fr))",gap:10,marginBottom:56}}>
+      {cr.map((c,i)=><div key={i} style={{padding:"20px 16px",background:"rgba(255,255,255,0.02)",borderRadius:9,borderLeft:`3px solid ${C.g}`}}>
+        <div style={{fontFamily:F,fontSize:26,fontWeight:800,marginBottom:4}}><Grad>{c.n}</Grad></div>
+        <div style={{fontFamily:F,fontSize:10,color:C.tl,lineHeight:1.5,fontWeight:400}}>{c.l}</div>
+      </div>)}
+    </div>
+
+    {/* EDIT 4: Visual timeline */}
+    <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:20,textTransform:"uppercase"}}><Grad>How We Work With You</Grad></div>
+    <div style={{position:"relative",marginBottom:56,paddingLeft:40}}>
+      {/* Vertical line */}
+      <div style={{position:"absolute",left:15,top:0,bottom:0,width:2,background:"rgba(43,172,34,0.15)",borderRadius:1}}/>
+      {timeline.map((t,i)=><div key={i} style={{position:"relative",marginBottom:i<2?32:0}}>
+        {/* Circle on timeline */}
+        <div style={{position:"absolute",left:-33,top:0,width:30,height:30,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F,fontSize:11,fontWeight:800,color:C.d1}}>{t.step}</div>
+        {/* Content card */}
+        <div style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:12,padding:"24px 24px 20px",borderLeft:`3px solid ${t.color}`}}>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8,flexWrap:"wrap"}}>
+            <span style={{fontFamily:F,fontSize:20,fontWeight:800,color:C.w}}>{t.title}</span>
+            <span style={{fontFamily:F,fontSize:11,fontWeight:600,color:C.d1,background:`linear-gradient(90deg,${C.gl},${C.gr})`,padding:"3px 12px",borderRadius:10}}>{t.time}</span>
+          </div>
+          <p style={{fontFamily:F,fontSize:13,color:C.tl,lineHeight:1.7,fontWeight:400,marginBottom:12}}>{t.desc}</p>
+          <div style={{background:"rgba(43,172,34,0.06)",borderRadius:8,padding:"10px 14px",border:"1px solid rgba(43,172,34,0.1)"}}>
+            <div style={{fontFamily:F,fontSize:9,color:C.g,fontWeight:700,letterSpacing:"0.06em",textTransform:"uppercase",marginBottom:3}}>Deliverable</div>
+            <div style={{fontFamily:F,fontSize:12,color:C.tl,lineHeight:1.5,fontWeight:400}}>{t.deliverable}</div>
+          </div>
+        </div>
+      </div>)}
+    </div>
+
+    {/* EDIT 5: Sectors We Serve */}
+    <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:16,textTransform:"uppercase"}}><Grad>Sectors We Serve</Grad></div>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
+      {sectors.map((s,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10,padding:"20px 16px",textAlign:"center"}}>
+        <div style={{fontSize:32,marginBottom:10}}>{s.icon}</div>
+        <div style={{fontFamily:F,fontSize:13,fontWeight:700,color:C.w,marginBottom:6}}>{s.name}</div>
+        <div style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.desc}</div>
+      </div>)}
+    </div>
+  </div></section>;
+}
+
+/* ========== EDIT 6: FORMSUBMIT.CO + THANK YOU MESSAGE ========== */
+function Contact() {
+  const [submitted,setSubmitted]=useState(false);
+
+  if(submitted){
+    return <section id="contact" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:620,margin:"0 auto",textAlign:"center"}}>
+      <div style={{fontSize:48,marginBottom:20}}>✅</div>
+      <h2 style={{fontFamily:F,fontSize:28,fontWeight:800,color:C.w,marginBottom:12}}>Thank You for Reaching Out!</h2>
+      <p style={{fontFamily:F,fontSize:15,color:C.tl,lineHeight:1.8,fontWeight:400,marginBottom:32}}>Your message has been received. We will contact you via email soon to discuss how we can help your technology reach the Arab market.</p>
+      <button onClick={()=>setSubmitted(false)} style={{padding:"13px 28px",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:13,fontWeight:700,cursor:"pointer"}}>Send Another Message</button>
+    </div></section>;
+  }
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    const form=e.target;
+    const data=new FormData(form);
+    fetch("https://formsubmit.co/ajax/info@greentech-bridge.com",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify(Object.fromEntries(data))
+    }).then(r=>{if(r.ok)setSubmitted(true);}).catch(()=>setSubmitted(true));
+  };
+
+  return <section id="contact" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:620,margin:"0 auto",textAlign:"center"}}>
+    <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>Get Started</Grad></div>
+    <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:10}}>Ready to Cross the Bridge?</h2>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,lineHeight:1.8,marginBottom:32,fontWeight:400}}>Book a free 30-minute strategy call. We'll assess your technology, identify the right Arab markets, and outline a path to your first MENA contract.</p>
+    <div style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:14,padding:32,maxWidth:460,margin:"0 auto",textAlign:"left"}}>
+      <div onSubmit={handleSubmit} style={{display:"flex",flexDirection:"column",gap:10}} ref={el=>{if(el)el.closest=el.closest||function(){};}} >
+        <input name="name" required placeholder="Your name" style={{width:"100%",padding:"13px 14px",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:7,color:C.w,fontFamily:F,fontSize:12,outline:"none",fontWeight:400}}/>
+        <input name="company" required placeholder="Company name" style={{width:"100%",padding:"13px 14px",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:7,color:C.w,fontFamily:F,fontSize:12,outline:"none",fontWeight:400}}/>
+        <input name="email" type="email" required placeholder="Email address" style={{width:"100%",padding:"13px 14px",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:7,color:C.w,fontFamily:F,fontSize:12,outline:"none",fontWeight:400}}/>
+        <select name="interest" style={{width:"100%",padding:"13px 14px",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:7,color:C.tl,fontFamily:F,fontSize:12,outline:"none",fontWeight:400}}>
+          <option value="">What are you interested in?</option><option>Explorer — Market Intelligence</option><option>Accelerator — Buyer Introductions</option><option>Full Bridge — Market Entry Partner</option><option>Free Strategy Call</option>
+        </select>
+        <textarea name="message" placeholder="Tell us about your technology (optional)" rows={3} style={{width:"100%",padding:"13px 14px",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:7,color:C.w,fontFamily:F,fontSize:12,outline:"none",resize:"vertical",fontWeight:400}}/>
+        <input type="hidden" name="_subject" value="New GreenTech Bridge Inquiry"/>
+        <input type="hidden" name="_captcha" value="false"/>
+        <button type="submit" onClick={(e)=>{const form=e.target.closest('div');const inputs=form.querySelectorAll('input[required]');let valid=true;inputs.forEach(inp=>{if(!inp.value){inp.style.borderColor='#E24B4A';valid=false;}else{inp.style.borderColor='rgba(255,255,255,0.07)';}});if(valid){const data={};form.querySelectorAll('input[name],select[name],textarea[name]').forEach(el=>{if(el.name&&!el.name.startsWith('_'))data[el.name]=el.value;});data._subject="New GreenTech Bridge Inquiry";fetch("https://formsubmit.co/ajax/info@greentech-bridge.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)}).then(r=>{if(r.ok)setSubmitted(true);}).catch(()=>setSubmitted(true));}}} style={{width:"100%",padding:"15px 0",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:14,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 24px rgba(43,172,34,0.2)"}}>Book Your Free Strategy Call</button>
+      </div>
+    </div>
+    <div style={{marginTop:24,fontFamily:F,fontSize:11,color:C.td,fontWeight:400}}>EU-registered (Estonia) · Operating across KSA, Jordan & Egypt · EU invoicing & funding eligibility</div>
+  </div></section>;
+}
+
+export default function App() {
+  const [active,setActive]=useState("hero");
+  useEffect(()=>{
+    const l=document.createElement("link");l.href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap";l.rel="stylesheet";document.head.appendChild(l);
+    const s=document.createElement("style");
+    s.textContent=`
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{background:${C.d1}}
+      ::selection{background:rgba(43,172,34,0.3);color:white}
+      input::placeholder,textarea::placeholder{color:rgba(245,245,240,0.25)}
+      button:hover{opacity:0.92}
+      html{scroll-behavior:smooth}
+      @media(max-width:768px){
+        .desktop-nav{display:none !important}
+        .mobile-hamburger{display:flex !important}
+        .mobile-menu{display:flex !important}
+      }
+    `;
+    document.head.appendChild(s);
+    const h=()=>{for(const id of["contact","about","markets","tool","services","problem","hero"]){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=200){setActive(id);break;}}};
+    window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h);
+  },[]);
+  return <div>
+    <Nav active={active}/>
+    <Hero/><Problem/><Services/><Tool/><Markets/><About/><Contact/>
+    <footer style={{background:C.d1,padding:"32px 24px",borderTop:`1px solid rgba(43,172,34,0.08)`}}>
+      <div style={{maxWidth:1200,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
+        <img src="/logo-horizontal.png" alt="GreenTech Bridge Ventures" style={{height:26,opacity:0.8}} />
+        <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:400}}>European CleanTech → Arab Markets · Proven Globally, Scaled in the Arab Region</div>
+        <div style={{fontFamily:F,fontSize:9,color:C.td}}>© {new Date().getFullYear()} GreenTech Bridge Ventures OÜ</div>
+      </div>
+    </footer>
+  </div>;
+}
