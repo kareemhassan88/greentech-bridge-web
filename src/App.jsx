@@ -42,13 +42,7 @@ const countries = [
 const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
 const Grad = ({children,style={}}) => <span style={{background:`linear-gradient(90deg,${C.gl},${C.gr})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",...style}}>{children}</span>;
   const paths = {water:s.water,bolt:s.bolt,recycle:s.recycle,leaf:s.leaf,signal:s.signal,scope:s.scope,building:s.building,thermo:s.thermo,barrier:s.barrier,gear:s.gear};
-  const p = paths[name]||paths.water;
-  const parts = p.split(' M');
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#2BAC22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    {parts.map((d,i)=><path key={i} d={i===0?d:'M'+d}/>)}
-    {name==='signal'&&<circle cx="12" cy="12" r="2" fill="#2BAC22" stroke="none"/>}
-  </svg>;
-};
+
 
 function useCountUp(end, duration=2000, startOnView=true) {
   const [count, setCount] = useState(0);
