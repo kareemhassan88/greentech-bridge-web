@@ -332,6 +332,8 @@ export default function App() {
       ::selection{background:rgba(43,172,34,0.3);color:white}
       input::placeholder,textarea::placeholder{color:rgba(245,245,240,0.25)}
       button:hover{opacity:0.92}
+      select{color-scheme:dark}
+      select option{background:#022023;color:#f5f5f0}
       html{scroll-behavior:smooth}
       @media(max-width:768px){
         .desktop-nav{display:none !important}
