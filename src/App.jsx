@@ -374,7 +374,7 @@ function Markets() {
           </div>;
         })() : (
           <div style={{background:"rgba(255,255,255,0.02)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:24,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:300}}>
-            <div style={{fontSize:40,marginBottom:16,opacity:0.3}}><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(43,172,34,0.4)" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            
             <div style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.w,marginBottom:8}}>Select a Country</div>
             <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click any country on the map or use the buttons below to explore opportunities.</div>
             <div style={{marginTop:20,fontFamily:F,fontSize:10,color:C.g,fontWeight:600}}>4 Regional Gateways · 22 Arab Markets</div>
@@ -521,7 +521,6 @@ export default function App() {
   const [active,setActive]=useState("hero");
   useEffect(()=>{
     const l=document.createElement("link");l.href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap";l.rel="stylesheet";document.head.appendChild(l);
-    const tw=document.createElement("script");tw.src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js";tw.crossOrigin="anonymous";tw.onload=()=>{if(window.twemoji){document.querySelectorAll("section").forEach(s=>window.twemoji.parse(s,{folder:"svg",ext:".svg"}))}};document.head.appendChild(tw);
     const s=document.createElement("style");
     s.textContent=`
       *{margin:0;padding:0;box-sizing:border-box}
@@ -531,7 +530,6 @@ export default function App() {
       button:hover{opacity:0.92}
       select{color-scheme:dark}
       select option{background:#022023;color:#f5f5f0}
-      img.emoji{height:1em;width:1em;margin:0 .05em 0 .1em;vertical-align:-0.1em}
       html{scroll-behavior:smooth}
       @media(max-width:768px){
         .desktop-nav{display:none !important}
@@ -540,7 +538,6 @@ export default function App() {
       }
     `;
     document.head.appendChild(s);
-    const observer=new MutationObserver(()=>{if(window.twemoji){document.querySelectorAll("section").forEach(s=>window.twemoji.parse(s,{folder:"svg",ext:".svg"}))}});observer.observe(document.body,{childList:true,subtree:true});
     const h=()=>{for(const id of["contact","about","markets","tool","services","problem","hero"]){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=200){setActive(id);break;}}};
     window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h);
   },[]);
