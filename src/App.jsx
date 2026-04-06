@@ -41,6 +41,16 @@ const countries = [
 
 const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
 const Grad = ({children,style={}}) => <span style={{background:`linear-gradient(90deg,${C.gl},${C.gr})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",...style}}>{children}</span>;
+const Icon = ({name,size=36}) => {
+  const s = {water:'M12 2.69l5.66 5.66a8 8 0 11-11.31 0z',bolt:'M13 2L3 14h9l-1 8 10-12h-9l1-8',recycle:'M7.5 4.27l3-1.73 3 1.73v3.46l-3 1.73-3-1.73V4.27zM1 16l3-1.73L7 16v3.46L4 21.2 1 19.46V16zM14 16l3-1.73 3 1.73v3.46l-3 1.73-3-1.73V16z',leaf:'M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 018 20c4 0 8.68-3 11-8a3 3 0 00-2-5z M6 15a3.5 3.5 0 012.63 1.18',signal:'M4.9 19.1C1 15.2 1 8.8 4.9 4.9 M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5 M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5 M19.1 4.9c3.9 3.9 3.9 10.3 0 14.2',scope:'M6 18h8 M3 22h18 M14 2v7.31 M14 9.3a6.5 6.5 0 11-4 5.7 M10 2h8',building:'M3 21h18 M3 10h18 M5 6l7-3 7 3 M4 10v11 M8 10v11 M12 10v11 M16 10v11 M20 10v11',thermo:'M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z',barrier:'M4 3h16 M4 3v18 M20 3v18 M4 9h16 M4 15h16 M4 3l4 6-4 6 4 6 M20 3l-4 6 4 6-4 6',gear:'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z'};
+  const paths = {water:s.water,bolt:s.bolt,recycle:s.recycle,leaf:s.leaf,signal:s.signal,scope:s.scope,building:s.building,thermo:s.thermo,barrier:s.barrier,gear:s.gear};
+  const p = paths[name]||paths.water;
+  const parts = p.split(' M');
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#2BAC22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    {parts.map((d,i)=><path key={i} d={i===0?d:'M'+d}/>)}
+    {name==='signal'&&<circle cx="12" cy="12" r="2" fill="#2BAC22" stroke="none"/>}
+  </svg>;
+};
 
 function useCountUp(end, duration=2000, startOnView=true) {
   const [count, setCount] = useState(0);
@@ -128,7 +138,7 @@ function Hero() {
 }
 
 function Problem() {
-  const g=[{t:"The Regulatory Maze",d:"European founders lack local networks and operational partners to navigate procurement and regulation across diverse Arab markets.",i:"🏛️"},{t:"The Climate Mismatch",d:"TRL 9 technology proven in European weather often fails in Arab heat, humidity, and salinity. Without climate adaptation, sales stall.",i:"🌡️"},{t:"The Expansion Dead-End",d:"Without a local operating partner, market entry costs are prohibitive. Most European companies give up within 12 months.",i:"🚧"},{t:"The Operational Vacuum",d:"No local specialized support infrastructure exists to install, maintain, and service European environmental technology on the ground.",i:"⚙️"}];
+  const g=[{t:"The Regulatory Maze",d:"European founders lack local networks and operational partners to navigate procurement and regulation across diverse Arab markets.",i:"building"},{t:"The Climate Mismatch",d:"TRL 9 technology proven in European weather often fails in Arab heat, humidity, and salinity. Without climate adaptation, sales stall.",i:"thermo"},{t:"The Expansion Dead-End",d:"Without a local operating partner, market entry costs are prohibitive. Most European companies give up within 12 months.",i:"barrier"},{t:"The Operational Vacuum",d:"No local specialized support infrastructure exists to install, maintain, and service European environmental technology on the ground.",i:"gear"}];
   return <section id="problem" style={{background:C.ch,padding:"100px 24px"}}>
     <div style={{maxWidth:1200,margin:"0 auto"}}>
       <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>The Innovation Gap</Grad></div>
@@ -398,12 +408,12 @@ function About() {
   ];
 
   const sectors=[
-    {icon:"💧",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
-    {icon:"⚡",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
-    {icon:"♻️",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
-    {icon:"🌱",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
-    {icon:"📡",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
-    {icon:"🔬",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
+    {icon:"water",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
+    {icon:"bolt",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
+    {icon:"recycle",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
+    {icon:"leaf",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
+    {icon:"signal",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
+    {icon:"scope",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
   ];
 
   return <section id="about" style={{background:C.d1,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -447,7 +457,7 @@ function About() {
     <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:16,textTransform:"uppercase"}}><Grad>Sectors We Serve</Grad></div>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
       {sectors.map((s,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10,padding:"20px 16px",textAlign:"center"}}>
-        <div style={{fontSize:32,marginBottom:10}}>{s.icon}</div>
+        <div style={{marginBottom:10}}><Icon name={s.icon} size={36}/></div>
         <div style={{fontFamily:F,fontSize:13,fontWeight:700,color:C.w,marginBottom:6}}>{s.name}</div>
         <div style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.desc}</div>
       </div>)}
