@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const C = { d1:"#022023", d2:"#184647", g:"#2BAC22", gl:"#90DF3E", gr:"#2BAC22", w:"#f5f5f0", ch:"#0a1a1b", tl:"rgba(245,245,240,0.85)", td:"rgba(245,245,240,0.5)" };
 const F = "'Montserrat', sans-serif";
@@ -42,6 +42,40 @@ const countries = [
 const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
 const Grad = ({children,style={}}) => <span style={{background:`linear-gradient(90deg,${C.gl},${C.gr})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",...style}}>{children}</span>;
 
+function useCountUp(end, duration=2000, startOnView=true) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!startOnView) { setStarted(true); return; }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started) { setStarted(true); observer.disconnect(); }
+    }, { threshold: 0.3 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [started, startOnView]);
+  useEffect(() => {
+    if (!started) return;
+    let start = 0;
+    const step = end / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= end) { setCount(end); clearInterval(timer); }
+      else setCount(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, [started, end, duration]);
+  return { count, ref };
+}
+
+function AnimNum({value, prefix="", suffix="", duration=2000, style={}}) {
+  const num = parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
+  const {count, ref} = useCountUp(num, duration);
+  const hasDecimal = value.includes('.');
+  const display = hasDecimal ? count.toFixed(1) : (num >= 1000 ? count.toLocaleString() : count);
+  return <span ref={ref} style={style}>{prefix}{display}{suffix}</span>;
+}
+
 /* ========== EDIT 1: HAMBURGER MOBILE MENU ========== */
 function Nav({active}) {
   const [sc,setSc]=useState(false);
@@ -72,7 +106,7 @@ function Nav({active}) {
 }
 
 function Hero() {
-  const stats=[{n:"$250B+",l:"Green infrastructure investment"},{n:"$351B",l:"Cumulative RE FDI"},{n:"85%",l:"GCC food imported"},{n:"22",l:"Arab countries"},{n:"$31.5B",l:"Annual equipment imports"}];
+  const stats=[{v:250,p:"$",s:"B+",l:"Green infrastructure investment"},{v:351,p:"$",s:"B",l:"Cumulative RE FDI"},{v:85,p:"",s:"%",l:"GCC food imported"},{v:22,p:"",s:"",l:"Arab countries"},{v:31.5,p:"$",s:"B",l:"Annual equipment imports"}];
   return <section id="hero" style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",background:`linear-gradient(165deg,${C.d1} 0%,#011518 40%,${C.d2} 100%)`,position:"relative",overflow:"hidden"}}>
     <div style={{position:"absolute",top:"-20%",right:"-5%",width:"50vw",height:"50vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(43,172,34,0.05) 0%,transparent 70%)"}}/>
     <div style={{maxWidth:1200,margin:"0 auto",padding:"120px 24px 40px",position:"relative",zIndex:1}}>
@@ -86,7 +120,7 @@ function Hero() {
     </div>
     <div style={{display:"flex",flexWrap:"wrap"}}>
       {stats.map((s,i)=><div key={i} style={{flex:"1 1 180px",padding:"26px 18px",background:i%2===0?C.d2:"rgba(24,70,71,0.5)",textAlign:"center",borderRight:i<4?"1px solid rgba(255,255,255,0.04)":"none"}}>
-        <div style={{fontFamily:F,fontSize:24,fontWeight:800,marginBottom:5}}><Grad>{s.n}</Grad></div>
+        <div style={{fontFamily:F,fontSize:24,fontWeight:800,marginBottom:5}}><Grad><AnimNum value={String(s.v)} prefix={s.p} suffix={s.s} duration={2000}/></Grad></div>
         <div style={{fontFamily:F,fontSize:10,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.l}</div>
       </div>)}
     </div>
@@ -161,7 +195,7 @@ function Tool() {
   if(res){const lev=res.sc>=75?"High Potential":res.sc>=50?"Good Potential":"Early Stage";const lc=res.sc>=75?C.gl:res.sc>=50?C.g:"#fbbf24";
     return <section id="tool" style={{background:`linear-gradient(170deg,${C.d2} 0%,${C.d1} 100%)`,padding:"100px 24px"}}><div style={{maxWidth:720,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:36}}><div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:10,textTransform:"uppercase"}}><Grad>Your Results</Grad></div><h2 style={{fontFamily:F,fontSize:34,fontWeight:800,color:C.w}}>MENA Market Fit Score</h2></div>
-      <div style={{textAlign:"center",marginBottom:32}}><div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:150,height:150,borderRadius:"50%",background:`conic-gradient(${lc} ${res.sc*3.6}deg,rgba(255,255,255,0.04) 0deg)`,position:"relative"}}><div style={{width:120,height:120,borderRadius:"50%",background:C.d1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",position:"absolute"}}><span style={{fontFamily:F,fontSize:42,fontWeight:800,color:C.w}}>{res.sc}</span><span style={{fontFamily:F,fontSize:9,fontWeight:700,color:lc,letterSpacing:"0.05em"}}>{lev}</span></div></div></div>
+      <div style={{textAlign:"center",marginBottom:32}}><div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:150,height:150,borderRadius:"50%",background:`conic-gradient(${lc} ${res.sc*3.6}deg,rgba(255,255,255,0.04) 0deg)`,transition:"background 2s ease",position:"relative"}}><div style={{width:120,height:120,borderRadius:"50%",background:C.d1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",position:"absolute"}}><span style={{fontFamily:F,fontSize:42,fontWeight:800,color:C.w}}><AnimNum value={String(res.sc)} duration={1500}/></span><span style={{fontFamily:F,fontSize:9,fontWeight:700,color:lc,letterSpacing:"0.05em"}}>{lev}</span></div></div></div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
         <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)"}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:8,fontWeight:700,textTransform:"uppercase"}}>Top Markets</div>{res.tc.map((c,i)=>{const cd=countries.find(x=>x.n===c);return<div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>{cd&&<Flag code={cd.cc} size={20}/>}<span style={{fontFamily:F,fontSize:13,color:C.w,fontWeight:600}}>{c}</span></div>;})}</div>
         <div style={{background:"rgba(255,255,255,0.02)",borderRadius:10,padding:20,border:"1px solid rgba(255,255,255,0.05)"}}><div style={{fontFamily:F,fontSize:9,color:C.td,letterSpacing:"0.08em",marginBottom:8,fontWeight:700,textTransform:"uppercase"}}>Market Size</div><div style={{fontFamily:F,fontSize:26,fontWeight:800,marginBottom:3}}><Grad>{res.m}</Grad></div><div style={{fontFamily:F,fontSize:11,color:C.tl,fontWeight:400}}>Growth: {res.g} CAGR</div></div>
@@ -209,7 +243,7 @@ function Markets() {
 
 /* ========== EDIT 3: NEW ABOUT HEADING + EDIT 4: VISUAL TIMELINE + EDIT 5: SECTORS WE SERVE ========== */
 function About() {
-  const cr=[{n:"16+",l:"Years building environmental tech ecosystems across the Arab region"},{n:"22",l:"Countries of direct operational experience and government relationships"},{n:"$630M+",l:"Programme portfolio managed through regional technology centres"},{n:"1,500+",l:"Startups accelerated through regional innovation programmes"},{n:"2,000+",l:"Green SMEs supported through sustainability training programmes"},{n:"15,000+",l:"Stakeholders engaged across 80+ countries via annual summits"}];
+  const cr=[{v:16,p:"",s:"+",l:"Years building environmental tech ecosystems across the Arab region"},{v:22,p:"",s:"",l:"Countries of direct operational experience and government relationships"},{v:630,p:"$",s:"M+",l:"Programme portfolio managed through regional technology centres"},{v:1500,p:"",s:"+",l:"Startups accelerated through regional innovation programmes"},{v:2000,p:"",s:"+",l:"Green SMEs supported through sustainability training programmes"},{v:15000,p:"",s:"+",l:"Stakeholders engaged across 80+ countries via annual summits"}];
 
   const timeline=[
     {step:"01",title:"Assess",time:"4 weeks",color:C.g,desc:"We evaluate your technology's fit for MENA markets, identify target countries, and map the competitive landscape.",deliverable:"Written market entry brief with target countries, regulatory map, competitive analysis, and procurement channels"},
@@ -235,7 +269,7 @@ function About() {
     {/* Credential cards */}
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(165px,1fr))",gap:10,marginBottom:56}}>
       {cr.map((c,i)=><div key={i} style={{padding:"20px 16px",background:"rgba(255,255,255,0.02)",borderRadius:9,borderLeft:`3px solid ${C.g}`}}>
-        <div style={{fontFamily:F,fontSize:26,fontWeight:800,marginBottom:4}}><Grad>{c.n}</Grad></div>
+        <div style={{fontFamily:F,fontSize:26,fontWeight:800,marginBottom:4}}><Grad><AnimNum value={String(c.v)} prefix={c.p} suffix={c.s} duration={2500}/></Grad></div>
         <div style={{fontFamily:F,fontSize:10,color:C.tl,lineHeight:1.5,fontWeight:400}}>{c.l}</div>
       </div>)}
     </div>
