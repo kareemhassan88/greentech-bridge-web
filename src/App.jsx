@@ -221,100 +221,107 @@ function Markets() {
   const [sel,setSel]=useState(null);
   const selected = sel ? countries.find(c=>c.n===sel) : null;
 
-  // Country positions as % on the map image (lon/lat mapped to image extent -20..62, -15..40)
-  const dots = [
-    {n:"Morocco",x:16,y:11,gw:1},{n:"Algeria",x:28,y:6,gw:0},{n:"Tunisia",x:37,y:6,gw:0},
-    {n:"Libya",x:40,y:13,gw:0},{n:"Egypt",x:62,y:18,gw:1},{n:"Sudan",x:64,y:44,gw:0},
-    {n:"Mauritania",x:5,y:40,gw:0},{n:"Saudi Arabia",x:81,y:28,gw:1},{n:"UAE",x:91,y:28,gw:0},
-    {n:"Qatar",x:87,y:27,gw:0},{n:"Bahrain",x:86,y:25,gw:0},{n:"Kuwait",x:83,y:19,gw:0},
-    {n:"Oman",x:95,y:30,gw:0},{n:"Yemen",x:78,y:45,gw:0},{n:"Jordan",x:68,y:15,gw:1},
-    {n:"Syria",x:69,y:12,gw:0},{n:"Iraq",x:78,y:12,gw:0},{n:"Lebanon",x:67,y:11,gw:0},
-    {n:"Palestine",x:66,y:15,gw:0},{n:"Somalia",x:80,y:69,gw:0},{n:"Djibouti",x:77,y:52,gw:0},
-    {n:"Comoros",x:77,y:94,gw:0},
+  // Country clickable areas: x,y = center%, w,h = width/height% of map, gw = gateway
+  const areas = [
+    {n:"Morocco",x:13,y:18,w:18,h:24,gw:1},
+    {n:"Algeria",x:26,y:21,w:24,h:30,gw:0},
+    {n:"Tunisia",x:36,y:10,w:5,h:12,gw:0},
+    {n:"Libya",x:45,y:24,w:18,h:22,gw:0},
+    {n:"Egypt",x:62,y:23,w:14,h:16,gw:1},
+    {n:"Sudan",x:61,y:44,w:18,h:22,gw:0},
+    {n:"Mauritania",x:11,y:35,w:14,h:20,gw:0},
+    {n:"Saudi Arabia",x:79,y:28,w:24,h:26,gw:1},
+    {n:"UAE",x:90,y:28,w:6,h:6,gw:0},
+    {n:"Qatar",x:87,y:26,w:3,h:4,gw:0},
+    {n:"Bahrain",x:86,y:25,w:2,h:2,gw:0},
+    {n:"Kuwait",x:82,y:19,w:4,h:4,gw:0},
+    {n:"Oman",x:93,y:33,w:9,h:16,gw:0},
+    {n:"Yemen",x:83,y:43,w:14,h:11,gw:0},
+    {n:"Jordan",x:70,y:16,w:5,h:7,gw:1},
+    {n:"Syria",x:72,y:9,w:8,h:8,gw:0},
+    {n:"Iraq",x:78,y:12,w:11,h:14,gw:0},
+    {n:"Lebanon",x:68,y:11,w:3,h:3,gw:0},
+    {n:"Palestine",x:67,y:14,w:3,h:3,gw:0},
+    {n:"Somalia",x:80,y:62,w:12,h:22,gw:0},
+    {n:"Djibouti",x:76,y:50,w:4,h:4,gw:0},
+    {n:"Comoros",x:78,y:93,w:4,h:3,gw:0},
   ];
 
   const countryDetails = {
     "Egypt":{pop:"106M",gdp:"$347B",gdppc:"$3,270",green:"$19.8B",opp:["$17.7B water infrastructure plan","42% renewables target by 2030","$14.7B NWFE climate projects","100M+ tons solid waste — waste-to-energy","Scaling desalination 7x by 2030"]},
     "Jordan":{pop:"11.5M",gdp:"$50B",gdppc:"$4,350",green:"$3B+",opp:["$3B+ Aqaba-Amman desalination mega-project","50% renewable energy target by 2030","World's 5th most water-scarce country","$60B Economic Modernization Vision","45% non-revenue water loss — smart water"]},
-    "Saudi Arabia":{pop:"36M",gdp:"$1,084B",gdppc:"$30,099",green:"$12.8B",opp:["Green tech market growing to $12.8B by 2030","130 GW renewable capacity planned","Vision 2030 + NEOM smart city","50% energy from renewables by 2030","$8.3B in 7 new renewable projects"]},
-    "Morocco":{pop:"37M",gdp:"$154B",gdppc:"$4,162",green:"$5.6B",opp:["$5.6B solar/wind construction underway","52% renewables target by 2030","90% energy currently imported","Green hydrogen $120B+ by 2050","Xlinks $20B UK interconnector"]},
-    "UAE":{pop:"10M",gdp:"$549B",gdppc:"$49,498",green:"$40B+",opp:["$40B+ cumulative clean energy investment","Net Zero 2050 target","ALTERRA $30B climate fund from COP28","$36B NDC investment needs 2023-2030","Solar Park 5 GW by 2030"]},
-    "Qatar":{pop:"3M",gdp:"$220B",gdppc:"$71,653",green:"Growing",opp:["800 MW Al Kharsaah solar plant","20% renewable energy target","Heavy AgTech investment","$200M vertical farming commitment","Food security diversification"]},
-    "Oman":{pop:"5M",gdp:"$105B",gdppc:"$21,000",green:"Growing",opp:["Net Zero 2050 target","Green hydrogen hub in Duqm","Solar-powered desalination","Strategic port access","Energy diversification"]},
-    "Bahrain":{pop:"1.5M",gdp:"$44B",gdppc:"$29,333",green:"$30B plan",opp:["$30B Strategic Projects Plan","Waste-to-energy protocol 2025","Food Sustainability Initiative","Net Zero 2060 target","Gateway for Saudi business"]},
-    "Kuwait":{pop:"4.5M",gdp:"$160B",gdppc:"$35,556",green:"Growing",opp:["Net Zero 2060 target","KIA climate integration","Renewable energy expansion","Al Shagaya renewable complex","Desalination modernization"]},
-    "Iraq":{pop:"44M",gdp:"$264B",gdppc:"$6,000",green:"Massive gap",opp:["Top 5 Arab electricity producer","Massive infrastructure rebuilding","Water treatment urgently needed","Electricity demand exceeding supply","Oil-to-gas conversion"]},
-    "Algeria":{pop:"45M",gdp:"$238B",gdppc:"$5,289",green:"Huge potential",opp:["2,700% increase in RE capacity needed","Pivoting to blue hydrogen","22 GW renewable target by 2030","Vast solar potential in Sahara","Desalination expansion needed"]},
-    "Tunisia":{pop:"12M",gdp:"$46B",gdppc:"$3,833",green:"Growing",opp:["Growing renewable energy sector","EU-linked green transition","Increasing water stress","Solar energy potential","Waste management modernization"]},
-    "Libya":{pop:"7M",gdp:"$41B",gdppc:"$5,857",green:"Rebuilding",opp:["Post-conflict rebuilding","2,000 MW interconnection with Egypt","Oil revenue for green transition","Vast solar potential","Water infrastructure reconstruction"]},
-    "Sudan":{pop:"48M",gdp:"$30B",gdppc:"$625",green:"Untapped",opp:["RE resources like Morocco & Egypt","Undeveloped RE potential","Red Sea ports for H2 export","Agricultural modernization","Water treatment critical"]},
-    "Mauritania":{pop:"5M",gdp:"$10B",gdppc:"$2,000",green:"Frontier",opp:["Top 5 renewable FDI in Arab region","Green hydrogen frontier","AMAN H2 mega-project","30 GW wind & solar potential","Strategic Atlantic coast"]},
-    "Lebanon":{pop:"5.5M",gdp:"$20B",gdppc:"$3,636",green:"Crisis-driven",opp:["Energy crisis driving solar adoption","Decentralized solar growing","Water infrastructure needs","Waste management crisis","Rebuilding opportunity"]},
-    "Palestine":{pop:"5.5M",gdp:"$18B",gdppc:"$3,273",green:"Critical need",opp:["Top water importer in MENA","Solar energy growing","Water treatment critical","Limited energy infrastructure","Agricultural water efficiency"]},
-    "Yemen":{pop:"34M",gdp:"$20B",gdppc:"$588",green:"Humanitarian",opp:["Severe water & energy crisis","Off-grid solar opportunity","Water purification critical","Humanitarian green tech","Decentralized energy solutions"]},
-    "Somalia":{pop:"18M",gdp:"$8B",gdppc:"$444",green:"Early stage",opp:["Off-grid renewable demand","Water purification critical","Early-stage high-need market","Solar for rural electrification","Climate adaptation urgent"]},
-    "Djibouti":{pop:"1M",gdp:"$4B",gdppc:"$4,000",green:"Strategic",opp:["Strategic Red Sea location","Geothermal & solar potential","Desalination for water security","Logistics hub for East Africa","Climate resilience infrastructure"]},
-    "Comoros":{pop:"0.9M",gdp:"$1.3B",gdppc:"$1,444",green:"Small scale",opp:["Island solar potential","Waste management critical","Water security challenges","Small-scale renewables","Climate adaptation needed"]},
-    "Syria":{pop:"23M",gdp:"$12B",gdppc:"$522",green:"Future market",opp:["Post-conflict reconstruction","Water & energy infra devastated","Massive rebuilding market","Agricultural restoration","All environmental infra to rebuild"]},
+    "Saudi Arabia":{pop:"36M",gdp:"$1,084B",gdppc:"$30,099",green:"$12.8B",opp:["Green tech market to $12.8B by 2030","130 GW renewable capacity planned","Vision 2030 + NEOM smart city","50% energy from renewables by 2030","$8.3B in 7 new renewable projects"]},
+    "Morocco":{pop:"37M",gdp:"$154B",gdppc:"$4,162",green:"$5.6B",opp:["$5.6B solar/wind underway","52% renewables target by 2030","90% energy currently imported","Green hydrogen $120B+ by 2050","Xlinks $20B UK interconnector"]},
+    "UAE":{pop:"10M",gdp:"$549B",gdppc:"$49,498",green:"$40B+",opp:["$40B+ clean energy investment","Net Zero 2050 target","ALTERRA $30B climate fund","$36B NDC investment 2023-2030","Solar Park 5 GW by 2030"]},
+    "Qatar":{pop:"3M",gdp:"$220B",gdppc:"$71,653",green:"Growing",opp:["800 MW Al Kharsaah solar","20% renewable target","AgTech & alt protein","$200M vertical farming","Food security programs"]},
+    "Oman":{pop:"5M",gdp:"$105B",gdppc:"$21,000",green:"Growing",opp:["Net Zero 2050 target","Green H2 hub Duqm & Salalah","Solar desalination","Strategic port access","Energy diversification"]},
+    "Bahrain":{pop:"1.5M",gdp:"$44B",gdppc:"$29,333",green:"$30B plan",opp:["$30B Strategic Projects","Waste-to-energy 2025","Food Sustainability","Net Zero 2060","Saudi gateway"]},
+    "Kuwait":{pop:"4.5M",gdp:"$160B",gdppc:"$35,556",green:"Growing",opp:["Net Zero 2060","KIA climate integration","RE expansion program","Al Shagaya complex","Desal modernization"]},
+    "Iraq":{pop:"44M",gdp:"$264B",gdppc:"$6,000",green:"Massive gap",opp:["Top 5 Arab electricity","Massive infra rebuilding","Water treatment urgent","Demand exceeding supply","Oil-to-gas conversion"]},
+    "Algeria":{pop:"45M",gdp:"$238B",gdppc:"$5,289",green:"Huge potential",opp:["2,700% RE increase needed","Blue hydrogen pivot","22 GW RE by 2030","Vast Sahara solar","Desal expansion"]},
+    "Tunisia":{pop:"12M",gdp:"$46B",gdppc:"$3,833",green:"Growing",opp:["Growing RE sector","EU green transition","Water stress increasing","Solar potential","Waste modernization"]},
+    "Libya":{pop:"7M",gdp:"$41B",gdppc:"$5,857",green:"Rebuilding",opp:["Post-conflict rebuild","2,000 MW Egypt link","Oil revenue for green","Vast solar potential","Water infra rebuild"]},
+    "Sudan":{pop:"48M",gdp:"$30B",gdppc:"$625",green:"Untapped",opp:["RE like Morocco & Egypt","Undeveloped potential","Red Sea H2 export","Agri modernization","Water treatment"]},
+    "Mauritania":{pop:"5M",gdp:"$10B",gdppc:"$2,000",green:"Frontier",opp:["Top 5 RE FDI Arab","H2 & wind frontier","AMAN H2 mega-project","30 GW wind & solar","Atlantic coast"]},
+    "Lebanon":{pop:"5.5M",gdp:"$20B",gdppc:"$3,636",green:"Crisis-driven",opp:["Energy crisis = solar","Decentral solar growing","Water infra needs","Waste crisis","Rebuilding opportunity"]},
+    "Palestine":{pop:"5.5M",gdp:"$18B",gdppc:"$3,273",green:"Critical need",opp:["Top water importer","Solar growing","Water treatment critical","Limited energy infra","Agri water efficiency"]},
+    "Yemen":{pop:"34M",gdp:"$20B",gdppc:"$588",green:"Humanitarian",opp:["Water & energy crisis","Off-grid solar","Water purification","Humanitarian green tech","Decentralized energy"]},
+    "Somalia":{pop:"18M",gdp:"$8B",gdppc:"$444",green:"Early stage",opp:["Off-grid RE demand","Water purification","High-need market","Solar electrification","Climate adaptation"]},
+    "Djibouti":{pop:"1M",gdp:"$4B",gdppc:"$4,000",green:"Strategic",opp:["Red Sea location","Geothermal & solar","Desal for water","E. Africa logistics hub","Climate resilience"]},
+    "Comoros":{pop:"0.9M",gdp:"$1.3B",gdppc:"$1,444",green:"Small scale",opp:["Island solar","Waste management","Water security","Small-scale RE","Climate adaptation"]},
+    "Syria":{pop:"23M",gdp:"$12B",gdppc:"$522",green:"Future market",opp:["Post-conflict rebuild","Water & energy devastated","Massive future market","Agri restoration","All infra to rebuild"]},
   };
 
   return <section id="markets" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
     <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>22 Arab Countries</Grad></div>
     <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Market Opportunities Across the Arab Region</h2>
-    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:24,fontWeight:400}}>Click on any country to explore population, economy, and green technology opportunities.</p>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:24,fontWeight:400}}>Click on any country on the map to explore its green technology opportunities.</p>
 
     {/* Gateway badges */}
     <div style={{display:"flex",gap:8,marginBottom:28,flexWrap:"wrap"}}>
       {countries.filter(c=>c.h).map((c,i)=><button key={i} onClick={()=>setSel(c.n)} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 14px",borderRadius:8,background:sel===c.n?"rgba(43,172,34,0.15)":"rgba(43,172,34,0.05)",border:sel===c.n?`1px solid ${C.g}`:"1px solid rgba(43,172,34,0.15)",cursor:"pointer",transition:"all .2s"}}>
         <Flag code={c.cc} size={18}/>
         <span style={{fontFamily:F,fontSize:11,fontWeight:700,color:sel===c.n?C.w:C.g}}>{c.n}</span>
-        <span style={{fontFamily:F,fontSize:8,color:C.td,fontWeight:400,fontStyle:"italic"}}>{c.gw?.replace("Gateway to ","")}</span>
       </button>)}
     </div>
 
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
-      {/* Map with image background + dots */}
+      {/* Map with clickable country areas */}
       <div style={{flex:"1 1 520px",position:"relative",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",overflow:"hidden"}}>
-        <img src="/arab-map.png" alt="Arab World Map" style={{width:"100%",display:"block",borderRadius:14}}/>
-        {/* Country dots overlay */}
-        {dots.map((d,i)=>{
-          const cd=countries.find(c=>c.n===d.n);
-          const isSel=sel===d.n;
-          const isGw=d.gw===1;
-          const dotSize=isGw?14:9;
-          return <div key={i} onClick={()=>setSel(sel===d.n?null:d.n)} style={{
-            position:"absolute",left:`${d.x}%`,top:`${d.y}%`,transform:"translate(-50%,-50%)",
-            cursor:"pointer",zIndex:isSel?20:isGw?10:5,
-          }}>
-            {/* Pulse ring for gateways */}
-            {isGw&&<div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",
-              width:dotSize+12,height:dotSize+12,borderRadius:"50%",
-              border:`1.5px solid ${C.g}`,opacity:0.3,
-              animation:"pulse 2s infinite",
-            }}/>}
-            {/* Dot */}
+        <img src="/arab-map.png" alt="Arab World" style={{width:"100%",display:"block",borderRadius:14}}/>
+        
+        {/* Clickable transparent areas for each country */}
+        {areas.map((a,i)=>{
+          const isSel=sel===a.n;
+          const isGw=a.gw===1;
+          return <div key={i} onClick={()=>setSel(sel===a.n?null:a.n)} 
+            title={a.n}
+            style={{
+              position:"absolute",
+              left:`${a.x-a.w/2}%`,top:`${a.y-a.h/2}%`,
+              width:`${a.w}%`,height:`${a.h}%`,
+              cursor:"pointer",zIndex:isSel?20:10,
+              background:isSel?"rgba(43,172,34,0.15)":"transparent",
+              border:isSel?`1.5px solid rgba(43,172,34,0.4)`:"1.5px solid transparent",
+              borderRadius:6,
+              transition:"all 0.25s",
+              display:"flex",alignItems:"center",justifyContent:"center",
+            }}>
+            {/* Dot marker */}
             <div style={{
-              width:isSel?dotSize+6:dotSize,height:isSel?dotSize+6:dotSize,borderRadius:"50%",
-              background:isGw?`linear-gradient(135deg,${C.gl},${C.gr})`:"rgba(144,223,62,0.6)",
-              border:isSel?`2px solid ${C.w}`:"2px solid rgba(0,0,0,0.3)",
-              boxShadow:isGw?"0 0 12px rgba(43,172,34,0.5)":"0 0 6px rgba(43,172,34,0.3)",
-              transition:"all 0.3s",
+              width:isGw?12:8,height:isGw?12:8,borderRadius:"50%",
+              background:isGw?`linear-gradient(135deg,${C.gl},${C.gr})`:"rgba(144,223,62,0.7)",
+              border:isSel?`2px solid ${C.w}`:"1.5px solid rgba(0,0,0,0.3)",
+              boxShadow:isGw?"0 0 10px rgba(43,172,34,0.5)":"0 0 4px rgba(43,172,34,0.3)",
+              transition:"all 0.3s",flexShrink:0,
             }}/>
-            {/* Label */}
-            <div style={{
-              position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",
-              marginTop:3,whiteSpace:"nowrap",fontFamily:F,
-              fontSize:isGw?9:7,fontWeight:isGw?700:500,
-              color:isSel?C.w:isGw?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.6)",
-              textShadow:"0 1px 4px rgba(0,0,0,0.8)",
-              transition:"all 0.3s",textAlign:"center",
-            }}>{d.n}</div>
           </div>;
         })}
+
         {/* Legend */}
-        <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:16,background:"rgba(2,32,35,0.8)",padding:"6px 16px",borderRadius:8}}>
-          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:10,height:10,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`,boxShadow:"0 0 6px rgba(43,172,34,0.5)"}}/><span style={{fontFamily:F,fontSize:9,color:C.tl}}>Regional Gateway</span></div>
-          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:7,height:7,borderRadius:"50%",background:"rgba(144,223,62,0.6)"}}/><span style={{fontFamily:F,fontSize:9,color:C.td}}>Arab Market</span></div>
+        <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:16,background:"rgba(2,32,35,0.85)",padding:"6px 16px",borderRadius:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:10,height:10,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`}}/><span style={{fontFamily:F,fontSize:9,color:C.tl}}>Regional Gateway</span></div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:7,height:7,borderRadius:"50%",background:"rgba(144,223,62,0.7)"}}/><span style={{fontFamily:F,fontSize:9,color:C.td}}>Arab Market</span></div>
         </div>
       </div>
 
@@ -355,14 +362,14 @@ function Markets() {
         })() : (
           <div style={{background:"rgba(255,255,255,0.02)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:24,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:300}}>
             <div style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.w,marginBottom:8}}>Select a Country</div>
-            <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click any dot on the map or the gateway badges above to explore opportunities.</div>
+            <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click anywhere on a country to explore its population, economy, and green technology opportunities.</div>
             <div style={{marginTop:20,fontFamily:F,fontSize:10,color:C.g,fontWeight:600}}>4 Regional Gateways | 22 Arab Markets</div>
           </div>
         )}
       </div>
     </div>
 
-    {/* Quick access list */}
+    {/* Quick access */}
     <div style={{marginTop:24}}>
       <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All 22 Arab Markets</div>
       <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
@@ -377,9 +384,7 @@ function Markets() {
         </button>)}
       </div>
     </div>
-  </div>
-  <style>{`@keyframes pulse{0%{transform:translate(-50%,-50%) scale(1);opacity:0.3}50%{transform:translate(-50%,-50%) scale(1.4);opacity:0.1}100%{transform:translate(-50%,-50%) scale(1);opacity:0.3}}`}</style>
-  </section>;
+  </div></section>;
 }
 
 /* ========== EDIT 3: NEW ABOUT HEADING + EDIT 4: VISUAL TIMELINE + EDIT 5: SECTORS WE SERVE ========== */
