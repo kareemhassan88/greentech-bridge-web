@@ -221,12 +221,29 @@ function Markets() {
   const [sel,setSel]=useState(null);
   const selected = sel ? countries.find(c=>c.n===sel) : null;
 
-  const mapCountries = [
-    {n:"Morocco",x:18,y:38,r:1},{n:"Mauritania",x:14,y:52,r:0},{n:"Algeria",x:28,y:36,r:0},{n:"Tunisia",x:33,y:32,r:0},{n:"Libya",x:40,y:36,r:0},
-    {n:"Egypt",x:48,y:42,r:1},{n:"Sudan",x:50,y:55,r:0},{n:"Djibouti",x:60,y:62,r:0},{n:"Somalia",x:64,y:68,r:0},{n:"Comoros",x:62,y:78,r:0},
-    {n:"Palestine",x:52,y:34,r:0},{n:"Jordan",x:54,y:36,r:1},{n:"Lebanon",x:52,y:30,r:0},{n:"Syria",x:55,y:28,r:0},{n:"Iraq",x:62,y:32,r:0},
-    {n:"Saudi Arabia",x:62,y:44,r:1},{n:"Kuwait",x:67,y:34,r:0},{n:"Bahrain",x:70,y:40,r:0},{n:"Qatar",x:72,y:42,r:0},{n:"UAE",x:76,y:44,r:0},
-    {n:"Oman",x:78,y:48,r:0},{n:"Yemen",x:66,y:56,r:0},
+  const arabMap = [
+    {id:"Morocco",d:"M35,69 L95,69 L115,81 L115,92 L103,104 L115,115 L103,127 L80,138 L46,150 L23,173 L12,173 L12,161 L23,138 L35,127 L46,115 L35,104 Z",cx:65,cy:115},
+    {id:"Mauritania",d:"M12,173 L23,173 L46,150 L80,138 L80,196 L80,242 L58,242 L12,242 L12,196 Z",cx:46,cy:207},
+    {id:"Algeria",d:"M115,81 L138,69 L184,58 L218,69 L241,69 L264,81 L310,81 L310,92 L322,104 L310,127 L310,173 L264,230 L218,242 L172,242 L126,242 L80,242 L80,196 L80,138 L103,127 L115,115 L103,104 L115,92 Z",cx:195,cy:155},
+    {id:"Tunisia",d:"M310,58 L333,46 L345,58 L345,69 L333,81 L310,81 L310,69 Z",cx:328,cy:69},
+    {id:"Libya",d:"M310,81 L333,81 L345,69 L368,69 L425,69 L460,58 L483,69 L483,81 L471,92 L471,115 L460,127 L460,173 L414,219 L368,219 L322,219 L310,173 L310,127 L322,104 L310,92 Z",cx:395,cy:140},
+    {id:"Egypt",d:"M483,81 L518,69 L541,81 L564,92 L576,92 L576,104 L576,138 L564,150 L553,173 L529,196 L506,196 L506,173 L518,150 L506,138 L483,150 L460,173 L460,127 L471,115 L471,92 L483,81 Z",cx:525,cy:130},
+    {id:"Sudan",d:"M460,173 L483,150 L506,138 L518,150 L506,173 L506,196 L529,196 L553,196 L576,196 L599,219 L599,253 L599,299 L576,310 L553,322 L518,322 L483,334 L460,322 L437,310 L437,276 L437,242 L414,219 L460,219 Z",cx:518,cy:265},
+    {id:"Palestine",d:"M564,90 L572,90 L572,100 L564,104 Z",cx:568,cy:96},
+    {id:"Lebanon",d:"M568,73 L576,73 L576,84 L568,84 Z",cx:572,cy:78},
+    {id:"Syria",d:"M576,46 L622,35 L645,35 L668,46 L668,69 L645,75 L622,81 L599,81 L576,81 L576,73 L568,73 L568,66 L576,58 Z",cx:622,cy:58},
+    {id:"Jordan",d:"M576,81 L599,81 L610,92 L610,104 L599,115 L587,115 L576,104 L576,92 Z",cx:593,cy:97},
+    {id:"Iraq",d:"M645,35 L668,35 L691,35 L714,46 L737,58 L737,81 L725,92 L714,104 L691,104 L668,92 L656,92 L645,81 L645,75 L668,69 L668,46 Z",cx:691,cy:69},
+    {id:"Saudi Arabia",d:"M599,115 L610,104 L610,92 L622,81 L645,81 L656,92 L668,92 L691,104 L714,104 L737,115 L760,127 L783,138 L806,138 L806,161 L795,184 L772,196 L749,207 L714,219 L691,230 L668,230 L645,230 L622,219 L599,196 L587,173 L576,150 L564,138 L576,127 L587,115 Z",cx:685,cy:162},
+    {id:"Kuwait",d:"M737,78 L749,72 L760,78 L760,90 L749,90 L737,90 Z",cx:749,cy:83},
+    {id:"Bahrain",d:"M789,114 L796,114 L796,122 L789,122 Z",cx:792,cy:118},
+    {id:"Qatar",d:"M796,103 L808,103 L808,120 L802,128 L796,120 Z",cx:802,cy:114},
+    {id:"UAE",d:"M806,138 L829,127 L852,127 L864,138 L852,150 L829,150 L806,150 Z",cx:835,cy:138},
+    {id:"Oman",d:"M852,127 L876,115 L899,127 L899,150 L899,184 L876,196 L852,196 L829,196 L829,173 L829,150 L852,150 L864,138 Z",cx:870,cy:158},
+    {id:"Yemen",d:"M622,219 L645,230 L668,230 L691,230 L714,219 L726,230 L726,265 L703,276 L668,287 L645,287 L622,276 L599,265 L587,253 L599,242 L599,230 Z",cx:660,cy:255},
+    {id:"Djibouti",d:"M599,274 L612,268 L622,276 L612,288 L599,288 Z",cx:610,cy:280},
+    {id:"Somalia",d:"M622,276 L645,287 L668,287 L680,299 L691,322 L703,356 L714,391 L703,414 L680,437 L657,437 L634,414 L622,391 L610,356 L610,322 L610,299 L610,288 L612,288 L622,276 Z",cx:660,cy:360},
+    {id:"Comoros",d:"M608,488 L620,484 L626,492 L614,496 Z",cx:617,cy:490},
   ];
 
   const countryDetails = {
@@ -254,62 +271,65 @@ function Markets() {
     "Syria":{pop:"23M",gdp:"$12B",gdppc:"$522",green:"Future market",opp:["Post-conflict reconstruction ahead","Water & energy infrastructure devastated","Massive rebuilding market (future)","Agricultural restoration needed","All environmental infrastructure to rebuild"]},
   };
 
+  const gateways = ["Egypt","Jordan","Saudi Arabia","Morocco"];
+
   return <section id="markets" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
     <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>22 Arab Countries</Grad></div>
     <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Market Opportunities Across the Arab Region</h2>
-    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:36,fontWeight:400}}>Click on any country to explore population, economy, and green technology opportunities.</p>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:24,fontWeight:400}}>Click on any country to explore population, economy, and green technology opportunities.</p>
+
+    {/* Gateway badges */}
+    <div style={{display:"flex",gap:8,marginBottom:24,flexWrap:"wrap"}}>
+      {countries.filter(c=>c.h).map((c,i)=><button key={i} onClick={()=>setSel(c.n)} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 14px",borderRadius:8,background:sel===c.n?"rgba(43,172,34,0.15)":"rgba(43,172,34,0.05)",border:sel===c.n?`1px solid ${C.g}`:"1px solid rgba(43,172,34,0.15)",cursor:"pointer",transition:"all .2s"}}>
+        <Flag code={c.cc} size={18}/>
+        <span style={{fontFamily:F,fontSize:11,fontWeight:700,color:sel===c.n?C.w:C.g}}>{c.n}</span>
+        <span style={{fontFamily:F,fontSize:8,color:C.td,fontWeight:400,fontStyle:"italic"}}>{c.gw?.replace("Gateway to ","")}</span>
+      </button>)}
+    </div>
 
     <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
-      {/* Map */}
-      <div style={{flex:"1 1 500px",position:"relative",background:"rgba(255,255,255,0.02)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:20,minHeight:420}}>
-        {/* Gateway legend */}
-        <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap"}}>
-          <div style={{display:"flex",alignItems:"center",gap:6}}><div style={{width:12,height:12,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`}}/><span style={{fontFamily:F,fontSize:10,color:C.tl,fontWeight:500}}>Regional Gateway</span></div>
-          <div style={{display:"flex",alignItems:"center",gap:6}}><div style={{width:8,height:8,borderRadius:"50%",background:"rgba(43,172,34,0.4)"}}/><span style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:500}}>Arab Market</span></div>
-        </div>
+      {/* SVG Map */}
+      <div style={{flex:"1 1 520px",position:"relative",background:"rgba(255,255,255,0.015)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:"20px 10px",overflow:"hidden"}}>
+        <svg viewBox="0 0 920 520" style={{width:"100%",height:"auto"}}>
+          {/* Subtle grid */}
+          {[0,1,2,3,4].map(i=><line key={`h${i}`} x1="0" y1={i*130} x2="920" y2={i*130} stroke="rgba(255,255,255,0.02)" strokeWidth="0.5"/>)}
+          {[0,1,2,3,4,5,6].map(i=><line key={`v${i}`} x1={i*153} y1="0" x2={i*153} y2="520" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5"/>)}
 
-        {/* SVG Map area */}
-        <div style={{position:"relative",width:"100%",paddingBottom:"65%"}}>
-          {mapCountries.map((mc,i)=>{
-            const cd=countries.find(c=>c.n===mc.n);
-            const isGateway=cd?.h;
-            const isSelected=sel===mc.n;
-            const size=isGateway?16:9;
-            return <div key={i} onClick={()=>setSel(sel===mc.n?null:mc.n)} style={{
-              position:"absolute",left:`${mc.x}%`,top:`${mc.y}%`,transform:"translate(-50%,-50%)",
-              cursor:"pointer",zIndex:isSelected?10:isGateway?5:1,transition:"all 0.3s",
-            }}>
-              <div style={{
-                width:isSelected?size+6:size,height:isSelected?size+6:size,borderRadius:"50%",
-                background:isGateway?`linear-gradient(135deg,${C.gl},${C.gr})`:"rgba(43,172,34,0.4)",
-                border:isSelected?`2px solid ${C.w}`:"2px solid transparent",
-                boxShadow:isGateway?"0 0 12px rgba(43,172,34,0.4)":"none",
-                transition:"all 0.3s",display:"flex",alignItems:"center",justifyContent:"center",
-              }}/>
-              <div style={{
-                position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",
-                marginTop:4,whiteSpace:"nowrap",fontFamily:F,
-                fontSize:isGateway?10:8,fontWeight:isGateway?700:500,
-                color:isSelected?C.w:isGateway?C.g:C.td,
-                transition:"all 0.3s",textAlign:"center",
-              }}>{mc.n}</div>
-              {isGateway&&!sel&&cd?.gw&&<div style={{
-                position:"absolute",top:"-20px",left:"50%",transform:"translateX(-50%)",
-                whiteSpace:"nowrap",fontFamily:F,fontSize:7,fontWeight:500,
-                color:C.g,fontStyle:"italic",opacity:0.7,
-              }}>{cd.gw.replace("Gateway to ","")}</div>}
-            </div>;
+          {/* Country shapes */}
+          {arabMap.map((m,i)=>{
+            const cd=countries.find(c=>c.n===m.id);
+            const isGateway=gateways.includes(m.id);
+            const isSel=sel===m.id;
+            return <g key={i} onClick={()=>setSel(sel===m.id?null:m.id)} style={{cursor:"pointer"}}>
+              <path d={m.d}
+                fill={isSel?"rgba(144,223,62,0.6)":isGateway?"rgba(43,172,34,0.45)":"rgba(43,172,34,0.25)"}
+                stroke={isSel?C.gl:isGateway?"rgba(144,223,62,0.6)":"rgba(43,172,34,0.3)"}
+                strokeWidth={isSel?2:isGateway?1.2:0.5}
+                style={{transition:"all 0.3s"}}
+              />
+              {/* Country label */}
+              <text x={m.cx} y={m.cy} textAnchor="middle" dominantBaseline="central"
+                style={{fontFamily:F,fontSize:isGateway?9:7,fontWeight:isGateway?700:400,
+                fill:isSel?"#fff":isGateway?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.5)",
+                pointerEvents:"none",transition:"all 0.3s"}}>
+                {m.id==="Saudi Arabia"?"KSA":m.id==="United Arab Emirates"?"UAE":m.id}
+              </text>
+              {/* Gateway indicator */}
+              {isGateway&&!isSel&&<circle cx={m.cx} cy={m.cy-14} r={3} fill={C.gl} opacity={0.7}>
+                <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" repeatCount="indefinite"/>
+              </circle>}
+            </g>;
           })}
-
-          {/* Subtle region outlines */}
-          <svg style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",pointerEvents:"none",opacity:0.06}} viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M5,30 Q15,25 25,28 L35,25 L45,30 L55,25 L65,28 L80,30 L85,35 L80,45 L85,55 L75,50 L70,55 L65,60 L55,65 L60,75 L55,80 L50,70 L45,60 L40,50 L30,45 L20,42 L10,45 L5,40 Z" fill="rgba(43,172,34,0.3)" stroke="rgba(43,172,34,0.5)" strokeWidth="0.3"/>
-          </svg>
+        </svg>
+        {/* Legend */}
+        <div style={{display:"flex",gap:16,justifyContent:"center",marginTop:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:12,height:12,borderRadius:2,background:"rgba(43,172,34,0.45)",border:"1px solid rgba(144,223,62,0.6)"}}/><span style={{fontFamily:F,fontSize:9,color:C.tl}}>Regional Gateway</span></div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:12,height:12,borderRadius:2,background:"rgba(43,172,34,0.25)"}}/><span style={{fontFamily:F,fontSize:9,color:C.td}}>Arab Market</span></div>
         </div>
       </div>
 
       {/* Detail Panel */}
-      <div style={{flex:"1 1 320px",minWidth:300}}>
+      <div style={{flex:"1 1 320px",minWidth:280}}>
         {selected ? (()=>{
           const det = countryDetails[selected.n] || {};
           const cd = selected;
@@ -322,8 +342,6 @@ function Markets() {
               </div>
               <button onClick={()=>setSel(null)} style={{marginLeft:"auto",background:"none",border:"none",color:C.td,fontSize:18,cursor:"pointer",padding:4}}>✕</button>
             </div>
-
-            {/* Key stats */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:16}}>
               {[{l:"Population",v:det.pop},{l:"GDP",v:det.gdp},{l:"GDP per Capita",v:det.gdppc},{l:"Green Sector",v:det.green}].map((s,i)=>(
                 <div key={i} style={{background:"rgba(255,255,255,0.03)",borderRadius:8,padding:"10px 12px"}}>
@@ -332,13 +350,9 @@ function Markets() {
                 </div>
               ))}
             </div>
-
-            {/* Sectors */}
             <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:16}}>
               {cd.t.map((s,j)=><span key={j} style={{padding:"3px 10px",borderRadius:8,background:"rgba(43,172,34,0.1)",fontFamily:F,fontSize:9,color:C.g,fontWeight:600}}>{s}</span>)}
             </div>
-
-            {/* Opportunities */}
             <div style={{fontFamily:F,fontSize:9,color:C.td,fontWeight:700,letterSpacing:"0.06em",textTransform:"uppercase",marginBottom:8}}>Green Sector Opportunities</div>
             {(det.opp||[]).map((o,i)=>(
               <div key={i} style={{display:"flex",gap:6,alignItems:"flex-start",marginBottom:6}}>
@@ -346,23 +360,22 @@ function Markets() {
                 <span style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.5,fontWeight:400}}>{o}</span>
               </div>
             ))}
-
             <button onClick={()=>scroll("contact")} style={{marginTop:16,width:"100%",padding:"12px 0",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:12,fontWeight:700,cursor:"pointer"}}>Explore This Market</button>
           </div>;
         })() : (
           <div style={{background:"rgba(255,255,255,0.02)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:24,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:300}}>
             <div style={{fontSize:40,marginBottom:16,opacity:0.3}}>🌍</div>
             <div style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.w,marginBottom:8}}>Select a Country</div>
-            <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click on any country marker on the map to explore population, economy, and green technology opportunities.</div>
+            <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click any country on the map or the gateway badges above to explore opportunities.</div>
             <div style={{marginTop:20,fontFamily:F,fontSize:10,color:C.g,fontWeight:600}}>4 Regional Gateways · 22 Arab Markets</div>
           </div>
         )}
       </div>
     </div>
 
-    {/* Country quick-access list below map */}
+    {/* Quick access list */}
     <div style={{marginTop:24}}>
-      <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All 22 Arab Markets — Quick Access</div>
+      <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All 22 Arab Markets</div>
       <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
         {countries.map((c,i)=><button key={i} onClick={()=>setSel(sel===c.n?null:c.n)} style={{
           background:sel===c.n?"rgba(43,172,34,0.1)":"rgba(255,255,255,0.015)",
