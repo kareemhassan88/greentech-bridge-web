@@ -41,7 +41,6 @@ const countries = [
 
 const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
 const Grad = ({children,style={}}) => <span style={{background:`linear-gradient(90deg,${C.gl},${C.gr})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",...style}}>{children}</span>;
-  const paths = {water:s.water,bolt:s.bolt,recycle:s.recycle,leaf:s.leaf,signal:s.signal,scope:s.scope,building:s.building,thermo:s.thermo,barrier:s.barrier,gear:s.gear};
 
 
 function useCountUp(end, duration=2000, startOnView=true) {
@@ -233,11 +232,11 @@ function Markets() {
     {n:"Sudan",x:61,y:44,w:18,h:22,gw:0},
     {n:"Mauritania",x:11,y:35,w:14,h:20,gw:0},
     {n:"Saudi Arabia",x:79,y:28,w:24,h:26,gw:1},
-    {n:"UAE",x:90,y:28,w:6,h:6,gw:0},
+    {n:"UAE",x:90,y:28,w:5,h:5,gw:0},
     {n:"Qatar",x:87,y:26,w:3,h:4,gw:0},
     {n:"Bahrain",x:86,y:25,w:2,h:2,gw:0},
     {n:"Kuwait",x:82,y:19,w:4,h:4,gw:0},
-    {n:"Oman",x:93,y:33,w:9,h:16,gw:0},
+    {n:"Oman",x:95,y:35,w:7,h:12,gw:0},
     {n:"Yemen",x:83,y:43,w:14,h:11,gw:0},
     {n:"Jordan",x:70,y:16,w:5,h:7,gw:1},
     {n:"Syria",x:72,y:9,w:8,h:8,gw:0},
@@ -320,6 +319,15 @@ function Markets() {
           </div>;
         })}
 
+        {/* Country name labels */}
+        {areas.map((a,i)=><div key={"lbl"+i} style={{
+          position:"absolute",left:`${a.x}%`,top:`${a.y+a.h/2+1}%`,transform:"translateX(-50%)",
+          fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
+          color:sel===a.n?"rgba(255,255,255,0.9)":a.gw?"rgba(144,223,62,0.7)":"rgba(255,255,255,0.4)",
+          textShadow:"0 1px 3px rgba(0,0,0,0.8)",pointerEvents:"none",
+          whiteSpace:"nowrap",textAlign:"center",letterSpacing:"0.03em",
+          transition:"all 0.3s",zIndex:2,
+        }}>{a.n==="Saudi Arabia"?"KSA":a.n}</div>)}
         {/* Legend */}
         <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:16,background:"rgba(2,32,35,0.85)",padding:"6px 16px",borderRadius:8}}>
           <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:10,height:10,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`}}/><span style={{fontFamily:F,fontSize:9,color:C.tl}}>Regional Gateway</span></div>
