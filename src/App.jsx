@@ -129,7 +129,7 @@ function Hero() {
 }
 
 function Problem() {
-  const g=[{t:"The Regulatory Maze",d:"European founders lack local networks and operational partners to navigate procurement and regulation across diverse Arab markets.",i:"https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=200&fit=crop"},{t:"The Climate Mismatch",d:"TRL 9 technology proven in European weather often fails in Arab heat, humidity, and salinity. Without climate adaptation, sales stall.",i:"https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=200&h=200&fit=crop"},{t:"The Expansion Dead-End",d:"Without a local operating partner, market entry costs are prohibitive. Most European companies give up within 12 months.",i:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=200&h=200&fit=crop"},{t:"The Operational Vacuum",d:"No local specialized support infrastructure exists to install, maintain, and service European environmental technology on the ground.",i:"https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=200&h=200&fit=crop"}];
+  const g=[{t:"The Regulatory Maze",d:"European founders lack local networks and operational partners to navigate procurement and regulation across diverse Arab markets.",i:"https://api.iconify.design/lucide/landmark.svg?color=%232BAC22&width=48"},{t:"The Climate Mismatch",d:"TRL 9 technology proven in European weather often fails in Arab heat, humidity, and salinity. Without climate adaptation, sales stall.",i:"https://api.iconify.design/lucide/thermometer-sun.svg?color=%232BAC22&width=48"},{t:"The Expansion Dead-End",d:"Without a local operating partner, market entry costs are prohibitive. Most European companies give up within 12 months.",i:"https://api.iconify.design/lucide/shield-x.svg?color=%232BAC22&width=48"},{t:"The Operational Vacuum",d:"No local specialized support infrastructure exists to install, maintain, and service European environmental technology on the ground.",i:"https://api.iconify.design/lucide/wrench.svg?color=%232BAC22&width=48"}];
   return <section id="problem" style={{background:C.ch,padding:"100px 24px"}}>
     <div style={{maxWidth:1200,margin:"0 auto"}}>
       <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>The Innovation Gap</Grad></div>
@@ -137,7 +137,7 @@ function Problem() {
       <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:48,fontWeight:400}}>European cleantech companies are ready to export, but the destination isn't ready to receive them. Four structural gaps block the path.</p>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(255px,1fr))",gap:14}}>
         {g.map((x,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:12,padding:"28px 22px",borderTop:`3px solid ${C.g}`}}>
-          <div style={{marginBottom:14}}><img src={x.i} alt={x.t} style={{width:56,height:56,borderRadius:12,objectFit:"cover",border:"1px solid rgba(43,172,34,0.15)"}}/></div>
+          <div style={{marginBottom:14,width:56,height:56,borderRadius:14,background:"rgba(43,172,34,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><img src={x.i} alt="" style={{width:32,height:32}}/></div>
           <h3 style={{fontFamily:F,fontSize:17,fontWeight:700,color:C.w,marginBottom:8}}>{x.t}</h3>
           <p style={{fontFamily:F,fontSize:12.5,color:C.tl,lineHeight:1.7,fontWeight:400}}>{x.d}</p>
         </div>)}
@@ -408,12 +408,12 @@ function About() {
   ];
 
   const sectors=[
-    {icon:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=120&h=120&fit=crop&crop=center",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
-    {icon:"https://images.unsplash.com/photo-1509391366360-2e959784a276?w=120&h=120&fit=crop&crop=center",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
-    {icon:"https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?w=200&h=200&fit=crop",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
-    {icon:"https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=200&h=200&fit=crop",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
-    {icon:"https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=200&h=200&fit=crop",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
-    {icon:"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=200&h=200&fit=crop",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
+    {icon:"https://api.iconify.design/lucide/droplets.svg?color=%232BAC22&width=48",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
+    {icon:"https://api.iconify.design/lucide/sun.svg?color=%232BAC22&width=48",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
+    {icon:"https://api.iconify.design/lucide/recycle.svg?color=%232BAC22&width=48",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
+    {icon:"https://api.iconify.design/lucide/sprout.svg?color=%232BAC22&width=48",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
+    {icon:"https://api.iconify.design/lucide/radio-tower.svg?color=%232BAC22&width=48",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
+    {icon:"https://api.iconify.design/lucide/atom.svg?color=%232BAC22&width=48",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
   ];
 
   return <section id="about" style={{background:C.d1,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -457,7 +457,7 @@ function About() {
     <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:16,textTransform:"uppercase"}}><Grad>Sectors We Serve</Grad></div>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
       {sectors.map((s,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10,padding:"20px 16px",textAlign:"center"}}>
-        <div style={{marginBottom:10}}><img src={s.icon} alt="" style={{width:56,height:56,borderRadius:12,objectFit:"cover",border:"1px solid rgba(43,172,34,0.2)"}}/></div>
+        <div style={{marginBottom:10,width:56,height:56,borderRadius:14,background:"rgba(43,172,34,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><img src={s.icon} alt="" style={{width:32,height:32}}/></div>
         <div style={{fontFamily:F,fontSize:13,fontWeight:700,color:C.w,marginBottom:6}}>{s.name}</div>
         <div style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.desc}</div>
       </div>)}
