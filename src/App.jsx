@@ -324,7 +324,7 @@ function Markets() {
           const lbl = {
             "Morocco":{dx:0,dy:-3},"Tunisia":{dx:0,dy:-2.5},"Djibouti":{dx:0,dy:-2.5},
             "Palestine":{dx:-2,dy:-2.5},"Lebanon":{dx:-2,dy:-2.5},
-            "Bahrain":{dx:2,dy:-1.5},"Qatar":{dx:2,dy:0},"Kuwait":{dx:2,dy:0},
+            "Bahrain":{dx:2,dy:-2.5},"Qatar":{dx:2,dy:-1.5},"Kuwait":{dx:2,dy:-1.5},
             "Syria":{dx:0,dy:-3},
           }[a.n] || {dx:0,dy:1.5};
           return <div key={"lbl"+i} style={{
