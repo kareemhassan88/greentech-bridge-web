@@ -137,7 +137,7 @@ function Problem() {
       <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:48,fontWeight:400}}>European cleantech companies are ready to export, but the destination isn't ready to receive them. Four structural gaps block the path.</p>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(255px,1fr))",gap:14}}>
         {g.map((x,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:12,padding:"28px 22px",borderTop:`3px solid ${C.g}`}}>
-          <div style={{marginBottom:14,width:56,height:56,borderRadius:14,background:"rgba(43,172,34,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><img src={x.i} alt="" style={{width:32,height:32}}/></div>
+          <div style={{marginBottom:14,display:"flex",justifyContent:"center"}}><img src={x.i} alt="" style={{width:44,height:44}}/></div>
           <h3 style={{fontFamily:F,fontSize:17,fontWeight:700,color:C.w,marginBottom:8}}>{x.t}</h3>
           <p style={{fontFamily:F,fontSize:12.5,color:C.tl,lineHeight:1.7,fontWeight:400}}>{x.d}</p>
         </div>)}
@@ -457,7 +457,7 @@ function About() {
     <div style={{fontFamily:F,fontSize:10,fontWeight:700,letterSpacing:"0.08em",marginBottom:16,textTransform:"uppercase"}}><Grad>Sectors We Serve</Grad></div>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
       {sectors.map((s,i)=><div key={i} style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10,padding:"20px 16px",textAlign:"center"}}>
-        <div style={{marginBottom:10,width:56,height:56,borderRadius:14,background:"rgba(43,172,34,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><img src={s.icon} alt="" style={{width:32,height:32}}/></div>
+        <div style={{marginBottom:10,display:"flex",justifyContent:"center"}}><img src={s.icon} alt="" style={{width:44,height:44}}/></div>
         <div style={{fontFamily:F,fontSize:13,fontWeight:700,color:C.w,marginBottom:6}}>{s.name}</div>
         <div style={{fontFamily:F,fontSize:11,color:C.tl,lineHeight:1.5,fontWeight:400}}>{s.desc}</div>
       </div>)}
