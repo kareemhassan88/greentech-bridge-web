@@ -321,13 +321,18 @@ function Markets() {
 
         {/* Country name labels */}
         {areas.map((a,i)=>{
-          const above=["Bahrain","Palestine","Lebanon","Qatar","Kuwait","Morocco","Tunisia","Djibouti"].includes(a.n);
+          const lbl = {
+            "Morocco":{dx:0,dy:-3.5},"Tunisia":{dx:0,dy:-2.5},"Djibouti":{dx:0,dy:-2.5},
+            "Palestine":{dx:-3,dy:-2.5},"Lebanon":{dx:-3,dy:-2.5},
+            "Bahrain":{dx:3,dy:-0.5},"Qatar":{dx:3.5,dy:-0.5},"Kuwait":{dx:3.5,dy:-0.5},
+            "Syria":{dx:0,dy:-3},
+          }[a.n] || {dx:0,dy:1.8};
           return <div key={"lbl"+i} style={{
-            position:"absolute",left:`${a.x}%`,top:above?`${a.y-2}%`:`${a.y+1.8}%`,transform:"translateX(-50%)",
+            position:"absolute",left:`${a.x+lbl.dx}%`,top:`${a.y+lbl.dy}%`,transform:lbl.dx!==0?"none":"translateX(-50%)",
             fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
             color:sel===a.n?"rgba(255,255,255,0.9)":a.gw?"rgba(144,223,62,0.7)":"rgba(255,255,255,0.4)",
             textShadow:"0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.7)",pointerEvents:"none",
-            whiteSpace:"nowrap",textAlign:"center",letterSpacing:"0.03em",
+            whiteSpace:"nowrap",letterSpacing:"0.03em",
             transition:"all 0.3s",zIndex:2,
           }}>{a.n==="Saudi Arabia"?"KSA":a.n}</div>;
         })}
