@@ -320,14 +320,17 @@ function Markets() {
         })}
 
         {/* Country name labels */}
-        {areas.map((a,i)=><div key={"lbl"+i} style={{
-          position:"absolute",left:`${a.x}%`,top:`${a.y+2.5}%`,transform:"translateX(-50%)",
-          fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
-          color:sel===a.n?"rgba(255,255,255,0.9)":a.gw?"rgba(144,223,62,0.7)":"rgba(255,255,255,0.4)",
-          textShadow:"0 1px 3px rgba(0,0,0,0.8)",pointerEvents:"none",
-          whiteSpace:"nowrap",textAlign:"center",letterSpacing:"0.03em",
-          transition:"all 0.3s",zIndex:2,
-        }}>{a.n==="Saudi Arabia"?"KSA":a.n}</div>)}
+        {areas.map((a,i)=>{
+          const above=["Bahrain","Palestine","Lebanon","Qatar","Kuwait","Morocco","Tunisia","Djibouti"].includes(a.n);
+          return <div key={"lbl"+i} style={{
+            position:"absolute",left:`${a.x}%`,top:above?`${a.y-2}%`:`${a.y+1.8}%`,transform:"translateX(-50%)",
+            fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
+            color:sel===a.n?"rgba(255,255,255,0.9)":a.gw?"rgba(144,223,62,0.7)":"rgba(255,255,255,0.4)",
+            textShadow:"0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.7)",pointerEvents:"none",
+            whiteSpace:"nowrap",textAlign:"center",letterSpacing:"0.03em",
+            transition:"all 0.3s",zIndex:2,
+          }}>{a.n==="Saudi Arabia"?"KSA":a.n}</div>;
+        })}
         {/* Legend */}
         <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",display:"flex",gap:16,background:"rgba(2,32,35,0.85)",padding:"6px 16px",borderRadius:8}}>
           <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:10,height:10,borderRadius:"50%",background:`linear-gradient(135deg,${C.gl},${C.gr})`}}/><span style={{fontFamily:F,fontSize:9,color:C.tl}}>Regional Gateway</span></div>
