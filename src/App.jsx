@@ -517,7 +517,7 @@ function Contact() {
         <button type="submit" onClick={(e)=>{const form=e.target.closest('div');const inputs=form.querySelectorAll('input[required],select[required],textarea[required]');let valid=true;const emailInput=form.querySelector('input[type=email]');if(emailInput&&emailInput.value&&!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(emailInput.value)){emailInput.style.borderColor='#E24B4A';valid=false;}const urlInput=form.querySelector('input[type=url]');if(urlInput&&urlInput.value&&!/^https?:\/\/.+/.test(urlInput.value)){urlInput.style.borderColor='#E24B4A';valid=false;}inputs.forEach(inp=>{if(!inp.value||(inp.tagName==='SELECT'&&!inp.value)){inp.style.borderColor='#E24B4A';valid=false;}else if(inp.style.borderColor!=='#E24B4A'){inp.style.borderColor='rgba(255,255,255,0.07)';}});if(valid){const data={};form.querySelectorAll('input[name],select[name],textarea[name]').forEach(el=>{if(el.name&&!el.name.startsWith('_'))data[el.name]=el.value;});data._subject="New GreenTech Bridge Inquiry";fetch("https://formsubmit.co/ajax/info@greentech-bridge.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)}).then(r=>{if(r.ok)setSubmitted(true);}).catch(()=>setSubmitted(true));}}} style={{width:"100%",padding:"15px 0",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:14,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 24px rgba(43,172,34,0.2)"}}>Book Your Free Strategy Call</button>
       </div>
     </div>
-    <div style={{marginTop:24,fontFamily:F,fontSize:11,color:C.td,fontWeight:400}}>EU-registered (Estonia) · Operating across KSA, Jordan & Egypt · EU invoicing & funding eligibility</div>
+    <div style={{marginTop:24,fontFamily:F,fontSize:11,color:C.td,fontWeight:400}}>Operating across KSA, Jordan & Egypt · EU invoicing & funding eligibility</div>
   </div></section>;
 }
 
@@ -552,7 +552,7 @@ export default function App() {
       <div style={{maxWidth:1200,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
         <img src="/logo-horizontal.png" alt="GreenTech Bridge Ventures" style={{height:26,opacity:0.8}} />
         <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:400}}>European CleanTech → Arab Markets · Proven Globally, Scaled in the Arab Region</div>
-        <div style={{fontFamily:F,fontSize:9,color:C.td}}>© {new Date().getFullYear()} GreenTech Bridge Ventures OÜ</div>
+        <div style={{fontFamily:F,fontSize:9,color:C.td}}>© {new Date().getFullYear()} GreenTech Bridge Ventures</div>
       </div>
     </footer>
   </div>;
