@@ -323,10 +323,10 @@ function Markets() {
         {areas.map((a,i)=>{
           const lbl = {
             "Morocco":{dx:0,dy:-3.5},"Tunisia":{dx:0,dy:-2.5},"Djibouti":{dx:0,dy:-2.5},
-            "Palestine":{dx:-3,dy:-2.5},"Lebanon":{dx:-3,dy:-2.5},
-            "Bahrain":{dx:3,dy:-0.5},"Qatar":{dx:3.5,dy:-0.5},"Kuwait":{dx:3.5,dy:-0.5},
-            "Syria":{dx:0,dy:-3},
-          }[a.n] || {dx:0,dy:1.8};
+            "Palestine":{dx:-2.5,dy:-2},"Lebanon":{dx:-2.5,dy:-2},
+            "Bahrain":{dx:2,dy:0},"Qatar":{dx:2.5,dy:0},"Kuwait":{dx:2.5,dy:0},
+            "Syria":{dx:0,dy:-2.5},
+          }[a.n] || {dx:0,dy:1.5};
           return <div key={"lbl"+i} style={{
             position:"absolute",left:`${a.x+lbl.dx}%`,top:`${a.y+lbl.dy}%`,transform:lbl.dx!==0?"none":"translateX(-50%)",
             fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
