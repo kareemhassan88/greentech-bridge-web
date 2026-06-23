@@ -15,28 +15,41 @@ const sectorData = {
 const Flag = ({code,size=20}) => <img src={`https://flagcdn.com/w40/${code}.png`} alt="" style={{width:size,height:Math.round(size*0.75),borderRadius:2,objectFit:"cover"}} />;
 
 const countries = [
-  { n:"Egypt",cc:"eg",h:true,gw:"Gateway to North Africa & the Nile Basin",s:"Renewable market $19.8B by 2030. $17.7B water infrastructure plan. $14.7B NWFE climate projects. 42% renewables target. 100M+ tons solid waste annually.",t:["Water","Energy","Waste","AgTech","H₂"] },
-  { n:"Jordan",cc:"jo",h:true,gw:"Gateway to the Levant & Eastern Mediterranean",s:"World's 5th most water-scarce country. $3B+ Aqaba-Amman desalination mega-project. 50% renewables target by 2030. $60B Economic Modernization Vision.",t:["Water","Energy","IoT","AgTech"] },
-  { n:"Saudi Arabia",cc:"sa",h:true,gw:"Gateway to the GCC & Arabian Peninsula",s:"Green tech market $5.3B→$12.8B by 2030. 50% renewables target. 130 GW renewable capacity planned. NEOM smart city. Vision 2030.",t:["Water","Energy","Waste","AgTech","H₂"] },
-  { n:"Morocco",cc:"ma",h:true,gw:"Gateway to the Maghreb & Africa",s:"52% renewables by 2030. $5.6B solar/wind underway. 90% energy imported. Green hydrogen CAPEX $120B+ by 2050. Xlinks UK interconnector.",t:["Energy","H₂","AgTech","Water"] },
-  { n:"UAE",cc:"ae",h:false,s:"Net Zero 2050. $40B+ cumulative clean energy. $36B NDC needs. ALTÉRRA $30B climate fund.",t:["Water","Energy","AgTech","IoT","H₂"] },
-  { n:"Qatar",cc:"qa",h:false,s:"20% renewables target. 800MW Al Kharsaah solar. Heavy AgTech & alternative protein investment.",t:["Energy","AgTech","Water","IoT"] },
-  { n:"Oman",cc:"om",h:false,s:"Net Zero 2050. Green hydrogen hub Duqm & Salalah.",t:["H₂","Energy","Water"] },
-  { n:"Bahrain",cc:"bh",h:false,s:"$30B Strategic Projects Plan. Waste-to-energy protocol.",t:["Waste","Energy"] },
-  { n:"Kuwait",cc:"kw",h:false,s:"Net Zero 2060. KIA climate integration. RE expansion.",t:["Energy","Water"] },
-  { n:"Iraq",cc:"iq",h:false,s:"Top 5 Arab electricity producer. Massive infra gap.",t:["Water","Energy","Waste"] },
-  { n:"Algeria",cc:"dz",h:false,s:"Needs 2,700% RE capacity increase. Blue hydrogen pivot.",t:["Energy","H₂","Water"] },
-  { n:"Tunisia",cc:"tn",h:false,s:"Growing RE. Water stress. EU green transition programs.",t:["Energy","Water"] },
-  { n:"Libya",cc:"ly",h:false,s:"Post-conflict rebuilding. 2,000 MW Egypt interconnection.",t:["Energy","Water"] },
-  { n:"Sudan",cc:"sd",h:false,s:"RE resources like Morocco/Egypt but almost entirely undeveloped.",t:["Energy","Water"] },
-  { n:"Mauritania",cc:"mr",h:false,s:"Top 5 Arab RE FDI. Green hydrogen & wind frontier.",t:["Energy","H₂"] },
-  { n:"Lebanon",cc:"lb",h:false,s:"Acute energy crisis. Decentralized solar growing.",t:["Energy","Water"] },
-  { n:"Palestine",cc:"ps",h:false,s:"Top MENA water importer. Solar growing. Water critical.",t:["Water","Energy"] },
-  { n:"Yemen",cc:"ye",h:false,s:"Severe water & energy crisis. Off-grid solar opportunity.",t:["Water","Energy"] },
-  { n:"Somalia",cc:"so",h:false,s:"Off-grid RE demand. Water purification critical.",t:["Water","Energy"] },
-  { n:"Djibouti",cc:"dj",h:false,s:"Red Sea location. Geothermal & solar. Desal needs.",t:["Energy","Water"] },
-  { n:"Comoros",cc:"km",h:false,s:"Island nation. Solar & waste needs.",t:["Energy","Waste"] },
-  { n:"Syria",cc:"sy",h:false,s:"Post-conflict. Water & energy infrastructure devastated.",t:["Water","Energy"] },
+  { n:"Egypt",cc:"eg",h:true,s:"$19.8B renewables. 42% RE target by 2030.",t:["Water","Energy"],gw:"Gateway to North Africa",r:"Arab States" },
+  { n:"Jordan",cc:"jo",h:true,s:"$3B+ desal mega-project. 50% RE target.",t:["Water","Energy"],gw:"Gateway to Levant",r:"Arab States" },
+  { n:"Saudi Arabia",cc:"sa",h:true,s:"$12.8B green tech by 2030. Vision 2030.",t:["Water","Energy","AgTech"],gw:"Gateway to GCC",r:"Arab States" },
+  { n:"Morocco",cc:"ma",h:true,s:"$5.6B solar/wind. 52% RE target.",t:["Energy","Water"],gw:"Gateway to Maghreb",r:"Arab States" },
+  { n:"Iraq",cc:"iq",h:false,s:"Massive infrastructure rebuilding.",t:["Water","Energy"],r:"Arab States" },
+  { n:"Lebanon",cc:"lb",h:false,s:"Energy crisis driving solar adoption.",t:["Energy"],r:"Arab States" },
+  { n:"Palestine",cc:"ps",h:false,s:"Top water importer. Solar growing.",t:["Water","Energy"],r:"Arab States" },
+  { n:"Qatar",cc:"qa",h:false,s:"800MW solar. AgTech investment.",t:["Energy","AgTech"],r:"Arab States" },
+  { n:"Kuwait",cc:"kw",h:false,s:"Net Zero 2060. Desal modernization.",t:["Water","Energy"],r:"Arab States" },
+  { n:"Tunisia",cc:"tn",h:false,s:"EU green transition link.",t:["Energy"],r:"Arab States" },
+  { n:"Somalia",cc:"so",h:false,s:"Off-grid RE. Water critical.",t:["Water","Energy"],r:"East Africa" },
+  { n:"Turkey",cc:"tr",h:false,s:"Major cleantech market. EU bridge.",t:["Energy","Water"],r:"Arab States" },
+  { n:"Pakistan",cc:"pk",h:false,s:"220M+ population. Water & energy crisis.",t:["Water","Energy"],r:"South Asia" },
+  { n:"Kenya",cc:"ke",h:true,s:"Africa's cleantech leader. Geothermal hub.",t:["Energy","Water"],gw:"Gateway to East Africa",r:"East Africa" },
+  { n:"Tanzania",cc:"tz",h:false,s:"Solar & water treatment growth.",t:["Energy","Water"],r:"East Africa" },
+  { n:"Ethiopia",cc:"et",h:false,s:"Grand RE ambitions. AgTech potential.",t:["Energy","AgTech"],r:"East Africa" },
+  { n:"Mozambique",cc:"mz",h:false,s:"Renewable energy frontier.",t:["Energy"],r:"East Africa" },
+  { n:"Burundi",cc:"bi",h:false,s:"Off-grid solar. Water security.",t:["Energy","Water"],r:"East Africa" },
+  { n:"Burkina Faso",cc:"bf",h:false,s:"Solar potential. Food security.",t:["Energy","AgTech"],r:"West Africa" },
+  { n:"Cameroon",cc:"cm",h:false,s:"Diverse energy mix potential.",t:["Energy","Water"],r:"West Africa" },
+  { n:"Senegal",cc:"sn",h:false,s:"West Africa RE leader.",t:["Energy"],r:"West Africa" },
+  { n:"Georgia",cc:"ge",h:false,s:"Hydro & green energy hub.",t:["Energy"],r:"Caucasus" },
+  { n:"Azerbaijan",cc:"az",h:false,s:"Energy transition from oil & gas.",t:["Energy"],r:"Caucasus" },
+  { n:"Armenia",cc:"am",h:false,s:"Solar potential. Water management.",t:["Energy","Water"],r:"Caucasus" },
+  { n:"India",cc:"in",h:true,s:"World's largest RE expansion.",t:["Energy","Water","AgTech"],gw:"Gateway to South Asia",r:"South Asia" },
+  { n:"Nepal",cc:"np",h:false,s:"Hydro & mountain RE potential.",t:["Energy"],r:"South Asia" },
+  { n:"Indonesia",cc:"id",h:true,s:"Largest SE Asian economy. Green transition.",t:["Energy","Water"],gw:"Gateway to Southeast Asia",r:"Southeast Asia" },
+  { n:"Kyrgyzstan",cc:"kg",h:false,s:"Hydro & clean energy potential.",t:["Energy"],r:"Central Asia" },
+  { n:"China",cc:"cn",h:false,s:"Global cleantech manufacturing hub.",t:["Energy","Water","AgTech"],r:"East Asia" },
+  { n:"Vietnam",cc:"vn",h:false,s:"Fast-growing RE market.",t:["Energy"],r:"East Asia" },
+  { n:"South Korea",cc:"kr",h:false,s:"Green New Deal. H2 economy leader.",t:["Energy"],r:"East Asia" },
+  { n:"Switzerland",cc:"ch",h:true,s:"GIWEH HQ. Global coordination hub.",t:["Water","Energy","AgTech"],gw:"Global HQ",r:"Europe" },
+  { n:"North Macedonia",cc:"mk",h:false,s:"EU accession green transition.",t:["Energy"],r:"Europe" },
+  { n:"Hungary",cc:"hu",h:false,s:"EU green policy implementation.",t:["Energy"],r:"Europe" },
+  { n:"Brazil",cc:"br",h:false,s:"Latin America's green giant.",t:["Energy","Water","AgTech"],r:"Latin America" },
 ];
 
 const scroll = id => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); };
@@ -107,7 +120,7 @@ function Nav({active}) {
 }
 
 function Hero() {
-  const stats=[{v:250,p:"$",s:"B+",l:"Green infrastructure investment"},{v:351,p:"$",s:"B",l:"Cumulative RE FDI"},{v:85,p:"",s:"%",l:"GCC food imported"},{v:22,p:"",s:"",l:"Arab countries"},{v:31.5,p:"$",s:"B",l:"Annual equipment imports"}];
+  const stats=[{v:35,p:"",s:"+",l:"Country network"},{v:115,p:"$",s:"B",l:"Market by 2030"},{v:630,p:"$",s:"M+",l:"Programmes managed"},{v:1500,p:"",s:"+",l:"Startups accelerated"},{v:20,p:"",s:"+",l:"Years experience"}];
   return <section id="hero" style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",background:`linear-gradient(165deg,${C.d1} 0%,#011518 40%,${C.d2} 100%)`,position:"relative",overflow:"hidden"}}>
     <div style={{position:"absolute",top:"-20%",right:"-5%",width:"50vw",height:"50vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(43,172,34,0.05) 0%,transparent 70%)"}}/>
     <div style={{maxWidth:1200,margin:"0 auto",padding:"120px 24px 40px",position:"relative",zIndex:1}}>
@@ -148,9 +161,9 @@ function Problem() {
 
 function Services() {
   const t=[
-    {n:"Explorer",tg:"Know your market",tm:"4 weeks",ft:["Market entry brief with target countries","Competitive landscape analysis","Regulatory requirements mapping","Procurement channel identification","1 strategy call with MENA team"],b:"Companies exploring MENA for the first time",p:"Fixed retainer (one-time)"},
-    {n:"Accelerator",tg:"Meet your buyers",tm:"8–12 weeks",featured:true,ft:["Everything in Explorer","5–10 curated buyer introductions","Government procurement connections","Local distributor matching","2 facilitated decision-maker meetings"],b:"Companies ready to start buyer conversations",p:"Retainer + success fee"},
-    {n:"Full Bridge",tg:"We become your MENA arm",tm:"6–12 months",ft:["Everything in Accelerator","First MENA contract or pilot","On-ground ops (KSA, Jordan, Egypt)","Compliance, logistics & management","Exclusive or semi-exclusive representation"],b:"Companies ready to deploy with a local partner",p:"Retainer + commission + margin"},
+    {n:"Scout & De-risk",tg:"Know your market",tm:"4 weeks",ft:["Market entry brief with target countries","Competitive landscape analysis","Regulatory requirements mapping","Procurement channel identification","1 strategy call with MENA team"],b:"Companies exploring MENA for the first time",p:"Fixed retainer (one-time)"},
+    {n:"Deploy",tg:"Meet your buyers",tm:"8–12 weeks",featured:true,ft:["Everything in Explorer","5–10 curated buyer introductions","Government procurement connections","Local distributor matching","2 facilitated decision-maker meetings"],b:"Companies ready to start buyer conversations",p:"Retainer + success fee"},
+    {n:"Scale",tg:"We become your MENA arm",tm:"6–12 months",ft:["Everything in Accelerator","First MENA contract or pilot","On-ground ops (KSA, Jordan, Egypt)","Compliance, logistics & management","Exclusive or semi-exclusive representation"],b:"Companies ready to deploy with a local partner",p:"Retainer + commission + margin"},
   ];
   return <section id="services" style={{background:C.d1,padding:"100px 24px"}}>
     <div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -191,7 +204,7 @@ function Tool() {
     {k:"goal",l:"Primary goal for MENA?",o:["Market intelligence only","Finding buyers & partners","First pilot project","Full market entry & distribution"]},
     {k:"time",l:"Timeline for MENA entry?",o:["Exploring (12+ months)","Planning (6–12 months)","Ready now (< 6 months)","Already started"]},
   ];
-  function calc(a){let sc=0;const sd=sectorData[a.sector]||{};sc+=({"Water Treatment & Desalination":28,"Renewable Energy & Storage":30,"Waste Management & Circular Economy":22,"AgTech & Smart Farming":26,"Environmental IoT & Monitoring":20,"Green Hydrogen":25})[a.sector]||20;sc+=({"TRL 6–7 (Prototype/Demo)":8,"TRL 8 (System complete)":14,"TRL 9 (Proven in operation)":18,"Already commercialized":20})[a.trl]||10;let cl=0;if(a.heat==="Yes, fully validated")cl+=10;else if(a.heat==="Partially tested")cl+=5;if(a.water==="No water needed")cl+=6;else if(a.water==="Minimal water")cl+=3;if(a.maint==="Fully remote capable")cl+=4;else if(a.maint==="Some local support")cl+=2;sc+=cl;sc+=({"Pre-revenue":3,"Under €1M":6,"€1M – €5M":10,"€5M – €20M":13,"€20M+":15})[a.revenue]||5;const ps=({"None at all":3,"Some conversations":7,"Active distributor/partner":11,"Operational presence":15})[a.mena]||3;const ts=({"Exploring (12+ months)":1,"Planning (6–12 months)":4,"Ready now (< 6 months)":6,"Already started":7})[a.time]||2;const gs=({"Market intelligence only":1,"Finding buyers & partners":3,"First pilot project":5,"Full market entry & distribution":6})[a.goal]||2;sc+=Math.round((ps+ts+gs)/2);sc=Math.min(Math.max(sc,15),97);const tc=(sd.countries||["Saudi Arabia","UAE","Egypt"]).slice(0,3);const ri=[];if(a.heat==="No, European conditions only")ri.push("Climate adaptation required before deployment");if(a.water==="Yes, significant water")ri.push("Water-intensive tech faces constraints in water-scarce markets");if(a.maint==="Specialized on-site teams")ri.push("Local O&M capability will need to be built");if(a.trl?.includes("6–7"))ri.push("Further validation needed before commercial pilots");if(!ri.length)ri.push("Strong profile — focus on speed of market entry");let tier="Explorer";if(a.goal==="Full market entry & distribution"||a.time==="Already started")tier="Full Bridge";else if(a.goal==="Finding buyers & partners"||a.goal==="First pilot project")tier="Accelerator";setRes({sc,tc,m:sd.market||"Growing",g:sd.growth||"High",d:sd.detail||"",ri,tier});}
+  function calc(a){let sc=0;const sd=sectorData[a.sector]||{};sc+=({"Water Treatment & Desalination":28,"Renewable Energy & Storage":30,"Waste Management & Circular Economy":22,"AgTech & Smart Farming":26,"Environmental IoT & Monitoring":20,"Green Hydrogen":25})[a.sector]||20;sc+=({"TRL 6–7 (Prototype/Demo)":8,"TRL 8 (System complete)":14,"TRL 9 (Proven in operation)":18,"Already commercialized":20})[a.trl]||10;let cl=0;if(a.heat==="Yes, fully validated")cl+=10;else if(a.heat==="Partially tested")cl+=5;if(a.water==="No water needed")cl+=6;else if(a.water==="Minimal water")cl+=3;if(a.maint==="Fully remote capable")cl+=4;else if(a.maint==="Some local support")cl+=2;sc+=cl;sc+=({"Pre-revenue":3,"Under €1M":6,"€1M – €5M":10,"€5M – €20M":13,"€20M+":15})[a.revenue]||5;const ps=({"None at all":3,"Some conversations":7,"Active distributor/partner":11,"Operational presence":15})[a.mena]||3;const ts=({"Exploring (12+ months)":1,"Planning (6–12 months)":4,"Ready now (< 6 months)":6,"Already started":7})[a.time]||2;const gs=({"Market intelligence only":1,"Finding buyers & partners":3,"First pilot project":5,"Full market entry & distribution":6})[a.goal]||2;sc+=Math.round((ps+ts+gs)/2);sc=Math.min(Math.max(sc,15),97);const tc=(sd.countries||["Saudi Arabia","UAE","Egypt"]).slice(0,3);const ri=[];if(a.heat==="No, European conditions only")ri.push("Climate adaptation required before deployment");if(a.water==="Yes, significant water")ri.push("Water-intensive tech faces constraints in water-scarce markets");if(a.maint==="Specialized on-site teams")ri.push("Local O&M capability will need to be built");if(a.trl?.includes("6–7"))ri.push("Further validation needed before commercial pilots");if(!ri.length)ri.push("Strong profile — focus on speed of market entry");let tier="Scout & De-risk";if(a.goal==="Full market entry & distribution"||a.time==="Already started")tier="Scale";else if(a.goal==="Finding buyers & partners"||a.goal==="First pilot project")tier="Deploy";setRes({sc,tc,m:sd.market||"Growing",g:sd.growth||"High",d:sd.detail||"",ri,tier});}
 
   if(res){const lev=res.sc>=75?"High Potential":res.sc>=50?"Good Potential":"Early Stage";const lc=res.sc>=75?C.gl:res.sc>=50?C.g:"#fbbf24";
     return <section id="tool" style={{background:`linear-gradient(170deg,${C.d2} 0%,${C.d1} 100%)`,padding:"100px 24px"}}><div style={{maxWidth:720,margin:"0 auto"}}>
@@ -224,29 +237,34 @@ function Markets() {
 
   // Country clickable areas: x,y = center%, w,h = width/height% of map, gw = gateway
   const areas = [
-    {n:"Morocco",x:13,y:18,w:18,h:24,gw:1},
-    {n:"Algeria",x:26,y:21,w:24,h:30,gw:0},
-    {n:"Tunisia",x:36,y:10,w:5,h:12,gw:0},
-    {n:"Libya",x:45,y:24,w:18,h:22,gw:0},
-    {n:"Egypt",x:62,y:23,w:14,h:16,gw:1},
-    {n:"Sudan",x:61,y:44,w:18,h:22,gw:0},
-    {n:"Mauritania",x:11,y:35,w:14,h:20,gw:0},
-    {n:"Saudi Arabia",x:79,y:28,w:24,h:26,gw:1},
-    {n:"UAE",x:90,y:28,w:5,h:5,gw:0},
-    {n:"Qatar",x:87,y:26,w:3,h:4,gw:0},
-    {n:"Bahrain",x:86,y:25,w:2,h:2,gw:0},
-    {n:"Kuwait",x:82,y:19,w:4,h:4,gw:0},
-    {n:"Oman",x:95,y:35,w:7,h:12,gw:0},
-    {n:"Yemen",x:83,y:43,w:14,h:11,gw:0},
-    {n:"Jordan",x:70,y:16,w:5,h:7,gw:1},
-    {n:"Syria",x:72,y:9,w:8,h:8,gw:0},
-    {n:"Iraq",x:78,y:12,w:11,h:14,gw:0},
-    {n:"Lebanon",x:68,y:11,w:3,h:3,gw:0},
-    {n:"Palestine",x:67,y:14,w:3,h:3,gw:0},
-    {n:"Somalia",x:80,y:62,w:12,h:22,gw:0},
-    {n:"Djibouti",x:76,y:50,w:4,h:4,gw:0},
-    {n:"Comoros",x:78,y:93,w:4,h:3,gw:0},
-  ];
+    // Arab States
+    {n:"Egypt",x:52,y:38,w:5,h:6,gw:1},{n:"Jordan",x:54,y:34,w:3,h:3,gw:1},
+    {n:"Saudi Arabia",x:56,y:42,w:8,h:8,gw:1},{n:"Morocco",x:42,y:34,w:5,h:5,gw:1},
+    {n:"Iraq",x:56,y:34,w:4,h:4,gw:0},{n:"Lebanon",x:54,y:32,w:2,h:2,gw:0},
+    {n:"Palestine",x:53,y:33,w:2,h:2,gw:0},{n:"Qatar",x:59,y:40,w:2,h:2,gw:0},
+    {n:"Kuwait",x:58,y:36,w:2,h:2,gw:0},{n:"Tunisia",x:47,y:33,w:3,h:3,gw:0},
+    {n:"Turkey",x:53,y:30,w:5,h:3,gw:0},{n:"Somalia",x:56,y:54,w:4,h:5,gw:0},
+    // East & West Africa
+    {n:"Kenya",x:55,y:52,w:4,h:4,gw:1},{n:"Tanzania",x:55,y:56,w:4,h:4,gw:0},
+    {n:"Ethiopia",x:56,y:49,w:4,h:4,gw:0},{n:"Mozambique",x:55,y:62,w:3,h:5,gw:0},
+    {n:"Burundi",x:53,y:56,w:2,h:2,gw:0},{n:"Burkina Faso",x:41,y:44,w:3,h:3,gw:0},
+    {n:"Cameroon",x:47,y:48,w:3,h:3,gw:0},{n:"Senegal",x:38,y:44,w:3,h:3,gw:0},
+    // South/SE Asia
+    {n:"Pakistan",x:62,y:36,w:4,h:4,gw:0},{n:"India",x:66,y:42,w:6,h:7,gw:1},
+    {n:"Nepal",x:67,y:36,w:3,h:2,gw:0},{n:"Indonesia",x:75,y:54,w:6,h:4,gw:1},
+    {n:"Kyrgyzstan",x:65,y:30,w:3,h:2,gw:0},
+    // East Asia
+    {n:"China",x:72,y:32,w:8,h:8,gw:0},{n:"Vietnam",x:74,y:44,w:3,h:4,gw:0},
+    {n:"South Korea",x:78,y:32,w:3,h:3,gw:0},
+    // Caucasus
+    {n:"Georgia",x:56,y:28,w:2,h:2,gw:0},{n:"Azerbaijan",x:57,y:29,w:2,h:2,gw:0},
+    {n:"Armenia",x:56,y:29,w:2,h:2,gw:0},
+    // Europe
+    {n:"Switzerland",x:47,y:26,w:2,h:2,gw:1},{n:"North Macedonia",x:50,y:28,w:2,h:2,gw:0},
+    {n:"Hungary",x:49,y:26,w:3,h:2,gw:0},
+    // Latin America
+    {n:"Brazil",x:30,y:58,w:7,h:8,gw:0},
+  ]
 
   const countryDetails = {
     "Egypt":{pop:"106M",gdp:"$347B",gdppc:"$3,270",green:"$19.8B",opp:["$17.7B water infrastructure plan","42% renewables target by 2030","$14.7B NWFE climate projects","100M+ tons solid waste — waste-to-energy","Scaling desalination 7x by 2030"]},
@@ -270,13 +288,37 @@ function Markets() {
     "Somalia":{pop:"18M",gdp:"$8B",gdppc:"$444",green:"Early stage",opp:["Off-grid RE demand","Water purification","High-need market","Solar electrification","Climate adaptation"]},
     "Djibouti":{pop:"1M",gdp:"$4B",gdppc:"$4,000",green:"Strategic",opp:["Red Sea location","Geothermal & solar","Desal for water","E. Africa logistics hub","Climate resilience"]},
     "Comoros":{pop:"0.9M",gdp:"$1.3B",gdppc:"$1,444",green:"Small scale",opp:["Island solar","Waste management","Water security","Small-scale RE","Climate adaptation"]},
+    "Turkey":{pop:"85M",gdp:"$1,108B",gdppc:"$13,035",green:"$15B+",opp:["EU Green Deal alignment","Massive RE expansion underway","Water management modernization","Cleantech manufacturing hub","Bridge between EU and MENA"]},
+    "Pakistan":{pop:"230M",gdp:"$350B",gdppc:"$1,522",green:"Growing",opp:["Severe water & energy crisis","100GW+ RE potential","Largest irrigation system globally","$100B climate vulnerability","Off-grid solar demand"]},
+    "Kenya":{pop:"56M",gdp:"$113B",gdppc:"$2,017",green:"$5B+",opp:["Africa's geothermal leader","90%+ RE electricity grid","Climate-smart agriculture demand","Water purification needs","Innovation hub for East Africa"]},
+    "Tanzania":{pop:"65M",gdp:"$77B",gdppc:"$1,185",green:"Growing",opp:["Solar & wind expansion","Rural electrification demand","Water treatment critical","Agricultural modernization","Mining sector green transition"]},
+    "Ethiopia":{pop:"126M",gdp:"$156B",gdppc:"$1,238",green:"Growing",opp:["Grand Ethiopian RE ambitions","Africa's 2nd largest population","Hydro & geothermal potential","AgTech for food security","Green industrialization"]},
+    "Mozambique":{pop:"33M",gdp:"$19B",gdppc:"$576",green:"Frontier",opp:["Vast RE potential","LNG-to-green transition","Rural electrification","Water security challenges","Climate adaptation urgent"]},
+    "Burundi":{pop:"13M",gdp:"$3.6B",gdppc:"$277",green:"Early stage",opp:["Off-grid solar demand","Water security critical","Agricultural modernization","Climate vulnerability","Small-scale RE solutions"]},
+    "Burkina Faso":{pop:"23M",gdp:"$19B",gdppc:"$826",green:"Growing",opp:["Sahel solar potential","Food security critical","Water management needs","Climate adaptation","Off-grid energy demand"]},
+    "Cameroon":{pop:"28M",gdp:"$45B",gdppc:"$1,607",green:"Growing",opp:["Diverse energy mix","Hydro expansion","Agricultural modernization","Water treatment needs","Waste management"]},
+    "Senegal":{pop:"18M",gdp:"$28B",gdppc:"$1,556",green:"Growing",opp:["West Africa RE leader","Gas-to-green transition","Water desalination growing","Smart agriculture","Climate resilience"]},
+    "Georgia":{pop:"3.7M",gdp:"$25B",gdppc:"$6,757",green:"Growing",opp:["Hydro & green energy hub","EU association green targets","Water management","Sustainable tourism","Energy efficiency"]},
+    "Azerbaijan":{pop:"10M",gdp:"$72B",gdppc:"$7,200",green:"Transitioning",opp:["COP29 host — green commitment","Oil-to-RE transition","Wind & solar Caspian","Water management","Green hydrogen"]},
+    "Armenia":{pop:"3M",gdp:"$20B",gdppc:"$6,667",green:"Growing",opp:["Solar potential","Water management","Nuclear-to-RE transition","AgTech mountain farming","Energy efficiency"]},
+    "India":{pop:"1.4B",gdp:"$3,940B",gdppc:"$2,814",green:"$50B+",opp:["World's largest RE expansion","500 GW RE target by 2030","$100B+ green hydrogen plan","Water crisis affecting 600M","Smart agriculture revolution"]},
+    "Nepal":{pop:"30M",gdp:"$42B",gdppc:"$1,400",green:"Growing",opp:["Massive hydro potential","Mountain RE solutions","Water management","Climate-smart agriculture","Off-grid energy"]},
+    "Indonesia":{pop:"275M",gdp:"$1,319B",gdppc:"$4,796",green:"$20B+",opp:["World's largest archipelago","Coal-to-RE transition","$20B Just Energy Transition","Water & waste management","Sustainable agriculture"]},
+    "Kyrgyzstan":{pop:"7M",gdp:"$11B",gdppc:"$1,571",green:"Growing",opp:["Hydro & clean energy","Water management Central Asia","Agricultural modernization","Climate adaptation mountain","Green mining"]},
+    "China":{pop:"1.4B",gdp:"$18,530B",gdppc:"$13,236",green:"$500B+",opp:["Global cleantech manufacturing","World's largest RE installer","Green hydrogen leader","Water treatment innovation","AgTech & smart farming at scale"]},
+    "Vietnam":{pop:"100M",gdp:"$430B",gdppc:"$4,300",green:"$15B+",opp:["Fastest growing RE in SE Asia","Solar boom underway","Water treatment demand","Green manufacturing","Climate adaptation coastal"]},
+    "South Korea":{pop:"52M",gdp:"$1,721B",gdppc:"$33,096",green:"$40B+",opp:["Green New Deal $62B plan","Hydrogen economy leader","Smart water infrastructure","Green tech export hub","Climate tech innovation"]},
+    "Switzerland":{pop:"8.8M",gdp:"$870B",gdppc:"$98,864",green:"HQ",opp:["GIWEH headquarters","Global cleantech hub","Innovation & IP center","International coordination","Climate finance center"]},
+    "North Macedonia":{pop:"2M",gdp:"$14B",gdppc:"$7,000",green:"Growing",opp:["EU accession green targets","RE expansion needed","Water management","Energy efficiency","Green transition support"]},
+    "Hungary":{pop:"10M",gdp:"$184B",gdppc:"$18,400",green:"Growing",opp:["EU Green Deal alignment","Solar expansion","Water management Danube","Energy efficiency buildings","Green industry transition"]},
+    "Brazil":{pop:"215M",gdp:"$2,127B",gdppc:"$9,893",green:"$30B+",opp:["Latin America's green giant","World leader in bioenergy","Amazon water & climate","Green hydrogen ambitions","AgTech & sustainable farming"]},
     "Syria":{pop:"23M",gdp:"$12B",gdppc:"$522",green:"Future market",opp:["Post-conflict rebuild","Water & energy devastated","Massive future market","Agri restoration","All infra to rebuild"]},
   };
 
   return <section id="markets" style={{background:C.ch,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
-    <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>22 Arab Countries</Grad></div>
-    <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Market Opportunities Across the Arab Region</h2>
-    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:24,fontWeight:400}}>Click on any country on the map to explore its green technology opportunities.</p>
+    <div style={{fontFamily:F,fontSize:11,fontWeight:700,letterSpacing:"0.12em",marginBottom:12,textTransform:"uppercase"}}><Grad>35+ Countries</Grad></div>
+    <h2 style={{fontFamily:F,fontSize:"clamp(24px,3.5vw,40px)",fontWeight:800,color:C.w,marginBottom:14}}>Global Network, Local Deployment</h2>
+    <p style={{fontFamily:F,fontSize:14,color:C.tl,maxWidth:660,lineHeight:1.8,marginBottom:24,fontWeight:400}}>Click on any country to explore its population, economy, and green technology opportunities across our 35+ country network.</p>
 
     {/* Gateway badges */}
     <div style={{display:"flex",gap:8,marginBottom:28,flexWrap:"wrap"}}>
@@ -329,7 +371,7 @@ function Markets() {
           }[a.n] || {dx:0,dy:1.5};
           return <div key={"lbl"+i} style={{
             position:"absolute",left:`${a.x+lbl.dx}%`,top:`${a.y+lbl.dy}%`,transform:lbl.dx!==0?"none":"translateX(-50%)",
-            fontFamily:F,fontSize:a.gw?8:6,fontWeight:a.gw?600:400,
+            fontFamily:F,fontSize:a.gw?7:5,fontWeight:a.gw?600:400,
             color:sel===a.n?"rgba(255,255,255,0.9)":a.gw?"rgba(144,223,62,0.7)":"rgba(255,255,255,0.4)",
             textShadow:"0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.7)",pointerEvents:"none",
             whiteSpace:"nowrap",letterSpacing:"0.03em",
@@ -381,7 +423,7 @@ function Markets() {
           <div style={{background:"rgba(255,255,255,0.02)",borderRadius:14,border:"1px solid rgba(255,255,255,0.05)",padding:24,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:300}}>
             <div style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.w,marginBottom:8}}>Select a Country</div>
             <div style={{fontFamily:F,fontSize:12,color:C.td,lineHeight:1.6,maxWidth:240}}>Click anywhere on a country to explore its population, economy, and green technology opportunities.</div>
-            <div style={{marginTop:20,fontFamily:F,fontSize:10,color:C.g,fontWeight:600}}>4 Regional Gateways | 22 Arab Markets</div>
+            <div style={{marginTop:20,fontFamily:F,fontSize:10,color:C.g,fontWeight:600}}>7 Regional Gateways | 35+ Countries</div>
           </div>
         )}
       </div>
@@ -389,7 +431,7 @@ function Markets() {
 
     {/* Quick access */}
     <div style={{marginTop:24}}>
-      <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All 22 Arab Markets</div>
+      <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:700,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>All 35+ GIWEH Markets</div>
       <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
         {countries.map((c,i)=><button key={i} onClick={()=>setSel(sel===c.n?null:c.n)} style={{
           background:sel===c.n?"rgba(43,172,34,0.1)":"rgba(255,255,255,0.015)",
@@ -407,7 +449,7 @@ function Markets() {
 
 /* ========== EDIT 3: NEW ABOUT HEADING + EDIT 4: VISUAL TIMELINE + EDIT 5: SECTORS WE SERVE ========== */
 function About() {
-  const cr=[{v:16,p:"",s:"+",l:"Years building environmental tech ecosystems across the Arab region"},{v:22,p:"",s:"",l:"Countries of direct operational experience and government relationships"},{v:630,p:"$",s:"M+",l:"Programme portfolio managed through regional technology centres"},{v:1500,p:"",s:"+",l:"Startups accelerated through regional innovation programmes"},{v:2000,p:"",s:"+",l:"Green SMEs supported through sustainability training programmes"},{v:15000,p:"",s:"+",l:"Stakeholders engaged across 80+ countries via annual summits"}];
+  const cr=[{v:20,p:"",s:"+",l:"Years of technical and commercial depth in green technology transfer"},{v:35,p:"",s:"+",l:"Countries with direct operational presence and government relationships"},{v:630,p:"$",s:"M+",l:"Programme portfolio managed across the GIWEH network"},{v:1500,p:"",s:"+",l:"Startups accelerated through global innovation programmes"},{v:3,p:"",s:"",l:"Domains: Water Security, Energy Resilience, Food Sovereignty"},{v:5,p:"",s:"",l:"Revenue lines built to recur across every deployment"}];
 
   const timeline=[
     {step:"01",title:"Assess",time:"4 weeks",color:C.g,desc:"We evaluate your technology's fit for MENA markets, identify target countries, and map the competitive landscape.",deliverable:"Written market entry brief with target countries, regulatory map, competitive analysis, and procurement channels"},
@@ -416,12 +458,9 @@ function About() {
   ];
 
   const sectors=[
-    {icon:"https://api.iconify.design/lucide/droplets.svg?color=%232BAC22&width=48",name:"Water Treatment & Desalination",desc:"Purification, recycling, desalination, smart water networks, leak detection"},
-    {icon:"https://api.iconify.design/lucide/sun.svg?color=%232BAC22&width=48",name:"Renewable Energy & Storage",desc:"Solar, wind, grid optimization, battery storage, sustainable cooling"},
-    {icon:"https://api.iconify.design/lucide/recycle.svg?color=%232BAC22&width=48",name:"Waste & Circular Economy",desc:"Waste-to-energy, recycling systems, industrial waste management"},
-    {icon:"https://api.iconify.design/lucide/sprout.svg?color=%232BAC22&width=48",name:"AgTech & Smart Farming",desc:"Vertical farming, precision agriculture, post-harvest technology, smart greenhouses"},
-    {icon:"https://api.iconify.design/lucide/radio-tower.svg?color=%232BAC22&width=48",name:"Environmental IoT",desc:"Remote monitoring, environmental sensors, SCADA, data analytics platforms"},
-    {icon:"https://api.iconify.design/lucide/atom.svg?color=%232BAC22&width=48",name:"Green Hydrogen",desc:"Electrolyzers, hydrogen storage, green ammonia, fuel cell systems"},
+    {icon:"https://api.iconify.design/lucide/droplets.svg?color=%232BAC22&width=48",title:"Water Security",desc:"Desalination, solar-thermal purification, water reuse, atmospheric generation, and smart leak detection."},
+    {icon:"https://api.iconify.design/lucide/sun.svg?color=%232BAC22&width=48",title:"Energy Resilience",desc:"Off-grid solutions, grid optimization, sustainable cooling, thermal batteries, and heat-rejecting passive materials."},
+    {icon:"https://api.iconify.design/lucide/sprout.svg?color=%232BAC22&width=48",title:"Food Sovereignty",desc:"Controlled-environment agriculture, smart greenhouses, arid-climate farming, and soil regeneration."},
   ];
 
   return <section id="about" style={{background:C.d1,padding:"100px 24px"}}><div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -517,7 +556,7 @@ function Contact() {
         <button type="submit" onClick={(e)=>{const form=e.target.closest('div');const inputs=form.querySelectorAll('input[required],select[required],textarea[required]');let valid=true;const emailInput=form.querySelector('input[type=email]');if(emailInput&&emailInput.value&&!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(emailInput.value)){emailInput.style.borderColor='#E24B4A';valid=false;}const urlInput=form.querySelector('input[type=url]');if(urlInput&&urlInput.value&&!/^https?:\/\/.+/.test(urlInput.value)){urlInput.style.borderColor='#E24B4A';valid=false;}inputs.forEach(inp=>{if(!inp.value||(inp.tagName==='SELECT'&&!inp.value)){inp.style.borderColor='#E24B4A';valid=false;}else if(inp.style.borderColor!=='#E24B4A'){inp.style.borderColor='rgba(255,255,255,0.07)';}});if(valid){const data={};form.querySelectorAll('input[name],select[name],textarea[name]').forEach(el=>{if(el.name&&!el.name.startsWith('_'))data[el.name]=el.value;});data._subject="New GreenTech Bridge Inquiry";fetch("https://formsubmit.co/ajax/info@greentech-bridge.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)}).then(r=>{if(r.ok)setSubmitted(true);}).catch(()=>setSubmitted(true));}}} style={{width:"100%",padding:"15px 0",background:`linear-gradient(90deg,${C.gl},${C.gr})`,color:C.d1,border:"none",borderRadius:8,fontFamily:F,fontSize:14,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 24px rgba(43,172,34,0.2)"}}>Book Your Free Strategy Call</button>
       </div>
     </div>
-    <div style={{marginTop:24,fontFamily:F,fontSize:11,color:C.td,fontWeight:400}}>Operating across KSA, Jordan & Egypt · EU invoicing & funding eligibility</div>
+    <div style={{marginTop:24,fontFamily:F,fontSize:11,color:C.td,fontWeight:400}}>Anchored by GIWEH, Geneva · EU invoicing & funding eligibility</div>
   </div></section>;
 }
 
@@ -551,7 +590,7 @@ export default function App() {
     <footer style={{background:C.d1,padding:"32px 24px",borderTop:`1px solid rgba(43,172,34,0.08)`}}>
       <div style={{maxWidth:1200,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
         <img src="/logo-horizontal.png" alt="GreenTech Bridge Ventures" style={{height:26,opacity:0.8}} />
-        <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:400}}>European CleanTech → Arab Markets · Proven Globally, Scaled in the Arab Region</div>
+        <div style={{fontFamily:F,fontSize:10,color:C.td,fontWeight:400}}>Proven Green Technology → Markets That Need It Most · Anchored by GIWEH, Geneva</div>
         <div style={{fontFamily:F,fontSize:9,color:C.td}}>© {new Date().getFullYear()} GreenTech Bridge Ventures</div>
       </div>
     </footer>
